@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "countries": {
+    "Nigeria": ["Lagos", "Abuja", "Port Harcourt", "Kano", "Ibadan", "Enugu"],
+    "Ghana": ["Accra", "Kumasi", "Tema", "Takoradi", "Tamale", "Cape Coast"]
+  },
+  "status": "planned"
+}

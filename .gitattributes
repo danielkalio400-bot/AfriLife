@@ -1,0 +1,11 @@
+* text=auto
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.fbx binary
+*.blend binary
+*.wav binary
+*.ogg binary
+*.mp4 binary
+*.psd binary

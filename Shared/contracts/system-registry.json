@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "systems": [
+    "character", "interactions", "needs", "housing", "inventory", "phone",
+    "npc-simulation", "economy", "banking", "jobs", "education", "relationships",
+    "vehicles", "traffic", "public-transport", "telecom", "power-grid",
+    "generator-solar-battery", "oil-fuel", "shopping", "business",
+    "real-estate-construction", "healthcare", "emergency-services",
+    "crime-investigation", "police-cid-financial-crime", "courts", "prison",
+    "immigration", "aviation", "maritime", "rail", "logistics",
+    "government", "central-bank", "citizen-dividend", "weather", "news-media",
+    "folklore-supernatural", "defense-diplomacy", "world-streaming",
+    "graphics", "audio", "multiplayer", "persistence"
+  ]
+}
