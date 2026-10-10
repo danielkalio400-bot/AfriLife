@@ -49,6 +49,9 @@ import { logisticsRuntime } from "./logistics-contracts.mjs";
 import { handleGovernment } from "./routes/government.mjs";
 import { GovernmentService } from "./services/government.mjs";
 import { governmentRuntime } from "./government-contracts.mjs";
+import { handleCentralBankEconomy } from "./routes/central-bank-economy.mjs";
+import { CentralBankEconomyService } from "./services/central-bank-economy.mjs";
+import { centralBankEconomyRuntime } from "./central-bank-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -114,6 +117,7 @@ export function makeServer() {
   const rail = new RailService();
   const logistics = new LogisticsService();
   const government = new GovernmentService();
+  const centralBankEconomy = new CentralBankEconomyService();
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -169,6 +173,7 @@ export function makeServer() {
         railSystem: "local-high-level-transport-economy-prototype",
         logisticsSupplyChains: "local-high-level-economy-prototype",
         government: "local-fictional-neutral-simulation-prototype",
+        centralBankEconomy: "local-fictional-macro-state-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -295,6 +300,11 @@ export function makeServer() {
     if (await handleGovernment(req, res, path, {
       government,
       contract: governmentRuntime,
+    })) return;
+
+    if (await handleCentralBankEconomy(req, res, path, {
+      economy: centralBankEconomy,
+      contract: centralBankEconomyRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });
