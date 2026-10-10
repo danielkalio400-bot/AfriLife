@@ -148,6 +148,22 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             GUILayout.Label("Fictional local time: "+
                 FirstNeighborhoodWorldClock.Display(_loop.State.ElapsedWorldSeconds));
             GUILayout.Label("Save verification: "+LocalWorldSaveStore.LastLoadStatus);
+            int usedWaits=_loop.State.WaitingSessionsDay==_loop.State.DaysCompleted
+                ?_loop.State.WaitingSessionsToday:0;
+            GUILayout.Label("Hourly waits: "+usedWaits+"/"+
+                FirstNeighborhoodWaitingService.MaxHourlyWaitsPerDay);
+            if(GUILayout.Button("Wait 1 hour at home or park",GUILayout.MinHeight(38)))
+            {
+                var waiting=new FirstNeighborhoodWaitingService(_loop);
+                if(waiting.TryWaitAtNearbyRestSpot(_actor,_points,
+                    _activityProps,out _message))
+                {
+                    if(SavePlayerPosition())
+                    {
+                        _nextScheduleRefresh=Time.unscaledTime;
+                    }
+                }
+            }
             GUILayout.Label("Known residents: "+_loop.Residents.Residents().Count);
             if(_loop.CurrentStep=="interact-with-persistent-npcs")
                 GUILayout.Label("Stand near a named resident at the neighbor marker.");

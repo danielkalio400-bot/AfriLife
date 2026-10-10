@@ -26,7 +26,11 @@ namespace AfriLife.Core.Save
                 StringComparison.Ordinal))
                 return true; // Do not apply this prototype's rules to other modes.
             if(state.NextStep < 0 || state.NextStep > FirstNeighborhoodPrototypeLoop.Steps.Length ||
-               state.DaysCompleted < 0 || state.ElapsedWorldSeconds < 0)
+               state.DaysCompleted < 0 || state.ElapsedWorldSeconds < 0 ||
+               state.WaitingSessionsDay < 0 ||
+               state.WaitingSessionsDay > state.DaysCompleted ||
+               state.WaitingSessionsToday < 0 ||
+               state.WaitingSessionsToday > FirstNeighborhoodWaitingService.MaxHourlyWaitsPerDay)
             {
                 reason="invalid-prototype-progress";
                 return false;

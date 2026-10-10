@@ -224,6 +224,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             // evening's fractional clock position.
             State.ElapsedWorldSeconds=FirstNeighborhoodWorldClock.BeginNextDay(
                 State.ElapsedWorldSeconds);
+            State.WaitingSessionsDay=State.DaysCompleted;
+            State.WaitingSessionsToday=0;
             _residents.AdvanceSchedule(State.ElapsedWorldSeconds);
             State.NextStep=0;
             State.CompletedSteps=Array.Empty<string>();

@@ -14,6 +14,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         public int ConversationCount;
         public int LastConversationDay = -1;
         public long ElapsedWorldSeconds;
+        public int WaitingSessionsDay;
+        public int WaitingSessionsToday;
         public bool Started;
         public bool HasSavedPosition;
         public float PlayerX;
@@ -30,6 +32,10 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             ConversationCount = Math.Max(0, ConversationCount);
             LastConversationDay = Math.Max(-1, LastConversationDay);
             ElapsedWorldSeconds = Math.Max(0, ElapsedWorldSeconds);
+            WaitingSessionsDay = Math.Max(0, WaitingSessionsDay);
+            WaitingSessionsToday = Math.Max(0,
+                Math.Min(FirstNeighborhoodWaitingService.MaxHourlyWaitsPerDay,
+                    WaitingSessionsToday));
             CompletedSteps ??= Array.Empty<string>();
             if (CompletedSteps.Length > NextStep)
                 Array.Resize(ref CompletedSteps, NextStep);

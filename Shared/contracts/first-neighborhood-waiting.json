@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "bulk": 41,
+  "feature": "one-hour intentional waiting near home bed or park activity prop",
+  "limitPerDay": 4,
+  "timeWindow": "06:00–20:00 fictional local",
+  "requires": [
+    "physical walkable actor",
+    "existing home or park interaction marker",
+    "nearby authored activity prop",
+    "incomplete demo day",
+    "available daily wait quota"
+  ],
+  "saveFields": [
+    "ElapsedWorldSeconds",
+    "WaitingSessionsDay",
+    "WaitingSessionsToday"
+  ],
+  "effects": [
+    "simulated world time advances 3600 seconds",
+    "resident schedules reevaluated"
+  ],
+  "noEffects": [
+    "no credit/debit",
+    "no accelerated daily-life step",
+    "no real-world scheduling"
+  ],
+  "limits": [
+    "Unity build unverified",
+    "fixed blockout only",
+    "not a realistic national city simulation"
+  ]
+}
