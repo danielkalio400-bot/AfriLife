@@ -3,8 +3,8 @@ using UnityEngine.AI;
 
 namespace AfriLife.Gameplay.FirstNeighborhood
 {
-    /// <summary>Visible local NPC avatar. Position follows a saved schedule;
-    /// its motion is a low-cost visual prototype, not full pathfinding.</summary>
+    /// <summary>Persistent local resident. Production art uses baked NavMesh routing;
+    /// the original small blockout keeps its simple non-production movement.</summary>
     public sealed class FirstNeighborhoodResidentAgent : MonoBehaviour
     {
         public string ResidentId = string.Empty;
@@ -15,6 +15,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private Vector3 _destination;
         private NavMeshAgent _navigation;
         private bool _destinationPending = true;
+        private float _nextPathAttemptTime;
+        private bool _navigationWarningShown;
 
         private void Awake()
         {
@@ -24,6 +26,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private void OnEnable()
         {
             _destinationPending = true;
+            _nextPathAttemptTime = 0f;
+            _navigationWarningShown = false;
         }
 
         public void SetDestination(string locationId, bool sleeping)
@@ -38,6 +42,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             }
             _destination.y=transform.position.y;
             _destinationPending = true;
+            _nextPathAttemptTime = 0f;
         }
 
         public void MoveTo(Vector3 destination)
@@ -45,6 +50,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             _destination=new Vector3(destination.x,transform.position.y,destination.z);
             Available=true;
             _destinationPending = true;
+            _nextPathAttemptTime = 0f;
         }
 
         public bool CanConverse(Vector3 actorPosition) => InConversationRange(actorPosition);
@@ -55,19 +61,40 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             {
                 // Authored world navigation must be baked before the resident moves.
                 // Never fall through to a straight-line movement that crosses walls.
-                if (!_navigation.isOnNavMesh) return;
-                if (_destinationPending)
+                if (!_navigation.isOnNavMesh)
                 {
-                    _destinationPending = false;
-                    if (NavMesh.SamplePosition(_destination, out NavMeshHit navGoal,
-                        2.5f, NavMesh.AllAreas))
+                    if (!_navigationWarningShown)
                     {
-                        if (!_navigation.SetDestination(navGoal.position))
-                            Debug.LogWarning("Resident path could not be set for " + DisplayName, this);
+                        Debug.LogWarning(
+                            "Resident is off baked NavMesh: " + DisplayName +
+                            ". Check imported terrain and agent placement.", this);
+                        _navigationWarningShown = true;
                     }
-                    else
+                    return;
+                }
+                _navigationWarningShown = false;
+                _navigation.speed = Mathf.Max(0.2f, Speed);
+                if (_navigation.isPathStale)
+                    _destinationPending = true;
+
+                // Retry missing routes at a controlled interval. A failed path
+                // must not permanently strand a resident after world changes.
+                if (_destinationPending && Time.time >= _nextPathAttemptTime)
+                {
+                    _nextPathAttemptTime = Time.time + 2f;
+                    if (NavMesh.SamplePosition(_destination, out NavMeshHit navGoal,
+                        2.5f, NavMesh.AllAreas) &&
+                        _navigation.SetDestination(navGoal.position))
                     {
-                        Debug.LogWarning("Resident destination has no nearby baked NavMesh: " + DisplayName, this);
+                        _destinationPending = false;
+                        _navigationWarningShown = false;
+                    }
+                    else if (!_navigationWarningShown)
+                    {
+                        Debug.LogWarning(
+                            "Resident cannot navigate to schedule destination: " +
+                            DisplayName, this);
+                        _navigationWarningShown = true;
                     }
                 }
                 return;

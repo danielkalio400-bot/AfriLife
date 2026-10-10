@@ -109,10 +109,12 @@ namespace AfriLife.Editor
             VerifyInstalled(Find(scene, "AfriLife Production Kwame"),
                 profile.KwamePrefab, "Kwame", false, true);
 
-            if (new[] { ada, bola, kwame }.Any(resident =>
+            GameObject[] residents = { ada, bola, kwame };
+            if (residents.Any(resident =>
                 resident.GetComponent<NavMeshAgent>() == null))
                 throw new InvalidOperationException(
                     "Production residents require NavMeshAgent components. Bake a usable walkable NavMesh before Play Mode.");
+            ValidateNavigationRoutes(residents);
 
             foreach (string name in new[] { "Ground - Prototype Square", "Home",
                 "Grocery Market", "Workplace", "Bank", "Clinic" })
@@ -124,6 +126,50 @@ namespace AfriLife.Editor
             }
 
             Debug.Log("AfriLife installed prefab sources, enabled humanoid controllers and physical world colliders verified. Manual realism and device QA remain required.");
+        }
+
+        // Real geometry must support connected walkable routes, not merely a
+        // NavMeshAgent component on each imported resident.
+        private static void ValidateNavigationRoutes(GameObject[] residents)
+        {
+            Vector3[] neighborhoodDestinations =
+            {
+                new Vector3(-9f, 0f, -6f),  // home
+                new Vector3(8f, 0f, -5f),   // market
+                new Vector3(3f, 0f, 3f),    // park
+                new Vector3(6f, 0f, 3f)     // neighbor gathering
+            };
+
+            NavMeshPath route = new NavMeshPath();
+            foreach (GameObject resident in residents)
+            {
+                NavMeshAgent agent = resident.GetComponent<NavMeshAgent>();
+                if (agent == null || !agent.enabled)
+                    throw new InvalidOperationException(
+                        resident.name + " needs an enabled NavMeshAgent.");
+                if (!NavMesh.SamplePosition(resident.transform.position,
+                    out NavMeshHit spawn, 3f, NavMesh.AllAreas))
+                    throw new InvalidOperationException(
+                        "No baked walkable NavMesh within 3 m of " + resident.name +
+                        ". Rebuild navigation after importing the realistic environment.");
+
+                foreach (Vector3 destination in neighborhoodDestinations)
+                {
+                    if (!NavMesh.SamplePosition(destination,
+                        out NavMeshHit goal, 3f, NavMesh.AllAreas))
+                        throw new InvalidOperationException(
+                            "Missing walkable NavMesh near neighborhood destination " +
+                            destination + ". Preserve gameplay service access.");
+
+                    if (!NavMesh.CalculatePath(spawn.position, goal.position,
+                        NavMesh.AllAreas, route) ||
+                        route.status != NavMeshPathStatus.PathComplete)
+                        throw new InvalidOperationException(
+                            "Resident " + resident.name +
+                            " cannot reach neighborhood service at " + destination +
+                            ". Check buildings, road connections, Navigation areas and links.");
+                }
+            }
         }
 
         private static void ReplaceResident(Scene scene, GameObject resident, GameObject prefab)

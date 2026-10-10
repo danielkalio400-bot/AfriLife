@@ -34,6 +34,9 @@ namespace AfriLife.Presentation
             {
                 Animator animator = _animators[i];
                 if (animator == null) continue;
+                // CharacterController or NavMeshAgent owns world movement.
+                // Imported clips cannot displace the persistent resident/player anchor.
+                animator.applyRootMotion = false;
                 foreach (AnimatorControllerParameter parameter in animator.parameters)
                 {
                     if (parameter.nameHash == _speedHash &&
