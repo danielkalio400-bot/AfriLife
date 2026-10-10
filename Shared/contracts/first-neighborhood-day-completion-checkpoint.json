@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "bulk": 43,
+  "focus": "two-stage verified demo day completion",
+  "steps": [
+    "save precompletion state and verify reload",
+    "complete candidate in memory only",
+    "write through dual-slot verified store",
+    "read back and validate checksum, world identity, full step ledger and incremented completed-day counter",
+    "install committed candidate as active HUD world only if all checks pass"
+  ],
+  "failure": "retain prior day as active in HUD and display non-destructive warning; reload checkpoint manually if necessary",
+  "preNormalization": "Validate active save integrity before any normalization that could discard bad ledger entries",
+  "restrictions": [
+    "no money/XP awards from checkpoint",
+    "offline only",
+    "Unity compilation and platform builds unverified",
+    "not a transaction spanning multiple storage hosts"
+  ]
+}

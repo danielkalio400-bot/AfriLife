@@ -222,16 +222,24 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             {
                 if(GUILayout.Button("Save & reload to finish day",GUILayout.MinHeight(40)))
                 {
+                    _saveVerified=false;
                     if(SavePlayerPosition() && TryLoadWorld(out var reloaded))
                     {
-                        // Verify persisted identity and current action index.
+                        // The pre-completion checkpoint must match the same
+                        // world and day before attempting a final write.
                         if(reloaded.SaveData.Header.WorldId==_loop.SaveData.Header.WorldId &&
-                            reloaded.State.NextStep==16)
+                            reloaded.State.NextStep==FirstNeighborhoodPrototypeLoop.Steps.Length-1 &&
+                            reloaded.State.DaysCompleted==_loop.State.DaysCompleted)
                         {
-                            _loop=reloaded;
-                            _actor?.Restore(_loop.State);
-                            _saveVerified=_loop.CompleteAfterVerifiedReload(out _message);
-                            if(_saveVerified)SavePlayerPosition();
+                            _saveVerified=FirstNeighborhoodDayCompletionCheckpoint.TryCommit(
+                                reloaded,LocalWorldSaveStore.Save,
+                                LocalWorldSaveStore.LoadOrCreate,
+                                out var completed,out _message);
+                            if(_saveVerified)
+                            {
+                                _loop=completed;
+                                _actor?.Restore(_loop.State);
+                            }
                         }
                         else _message="Save verification failed; progress unchanged.";
                     }

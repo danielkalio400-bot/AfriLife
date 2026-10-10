@@ -149,10 +149,13 @@ namespace AfriLife.Core.Save
         public static void Save(WorldSaveData save)
         {
             if(save==null)throw new ArgumentNullException(nameof(save));
-            save.Normalize();
+            // Validate BEFORE Normalize(): normalization can truncate or
+            // discard inconsistent ledger entries. Never silently repair an
+            // invalid active game state by writing a checksum for the result.
             if(!ValidWorld(save))
                 throw new InvalidDataException(
                     "World header or daily-life ledger is invalid.");
+            save.Normalize();
 
             Slot a=TryReadSlot(SlotAPath),b=TryReadSlot(SlotBPath);
             Slot latest=Latest(a,b);
