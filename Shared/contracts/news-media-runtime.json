@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "phase": 39,
+  "systems": [
+    "radio",
+    "tv",
+    "newspapers",
+    "social-feeds",
+    "emergency-alerts",
+    "breaking-news",
+    "government-announcements",
+    "election-coverage",
+    "fuel-shortages",
+    "blackouts",
+    "accidents",
+    "crime",
+    "war",
+    "peace-talks",
+    "currency-news"
+  ],
+  "countries": ["Nigeria", "Ghana"],
+  "channelTypes": ["radio", "tv", "newspaper", "social-feed"],
+  "topics": [
+    "emergency-alert",
+    "breaking-news",
+    "government-announcement",
+    "election-coverage",
+    "fuel-shortage",
+    "blackout",
+    "accident",
+    "crime",
+    "conflict",
+    "peace-talks",
+    "currency"
+  ],
+  "designRule": "News and media content is fictional in-world reporting. Political coverage is neutral, conflict/crime reporting stays non-graphic, and no item should be presented as real current Nigerian or Ghanaian news.",
+  "sourceRule": "Source-system tags may link fictional world events such as weather, economy, transport, government or utilities, but do not imply connection to real news services."
+}
