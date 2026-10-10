@@ -10,7 +10,7 @@ const THEMES = new Set([
 ]);
 const CHOICES = new Set(["observe", "ask-neighbor", "investigate", "reassure", "leave"]);
 const clean = (value, max = 90) => typeof value === "string" && value.trim() === value &&
-  value.length > 0 && value.length <= max && !/[\\u0000-\\u001f]/.test(value);
+  value.length > 0 && value.length <= max && !Array.from(value).some(ch => ch.charCodeAt(0) < 32);
 const clone = value => value == null ? null : structuredClone(value);
 const clamp = value => Math.max(0, Math.min(1, value));
 
