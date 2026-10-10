@@ -133,6 +133,18 @@ export class GovernmentService {
     return { ok: true, budget: { ...budget } };
   }
 
+  // Read-only snapshots for dependent fiscal services; do not create
+  // another authoritative treasury or budget ledger.
+  getBudget(budgetId) {
+    const record = this.#budgets.get(String(budgetId || ""));
+    return record ? { ...record } : null;
+  }
+
+  getAgency(agencyId) {
+    const record = this.#agencies.get(String(agencyId || ""));
+    return record ? { ...record } : null;
+  }
+
   approveBudget(budgetId, approvedSpendingMinorUnits) {
     const budget = this.#budgets.get(budgetId);
     if (!budget) return { ok: false, error: "public_budget_not_found" };
@@ -218,7 +230,9 @@ export class GovernmentService {
       return { ok: false, error: "invalid_public_spending_record" };
 
     const budget = this.#budgets.get(budgetId);
-    if (budget.countryId !== countryId || budget.status !== "approved")
+    if (budget.countryId !== countryId ||
+        this.#agencies.get(agencyId).countryId !== countryId ||
+        budget.status !== "approved")
       return { ok: false, error: "public_budget_not_approved" };
 
     const alreadySpent = [...this.#spending.values()]

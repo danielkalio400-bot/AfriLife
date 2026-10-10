@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "bulk": 29,
+  "phase": 41,
+  "countries": [
+    "Nigeria",
+    "Ghana"
+  ],
+  "countrySemantics": "fictional game economies; no claims about actual military budgets or real policy",
+  "branches": [
+    "army",
+    "navy",
+    "air-force",
+    "civil-support"
+  ],
+  "facilities": [
+    "base",
+    "transport",
+    "medical",
+    "support-center"
+  ],
+  "readinessComponents": [
+    "maintenance01",
+    "fuelAvailability01",
+    "medicalSupport01",
+    "serviceCapacity01"
+  ],
+  "fundingPurposes": [
+    "maintenance",
+    "fuel",
+    "medical-support",
+    "civil-services",
+    "logistics",
+    "equipment-upkeep"
+  ],
+  "budgetAuthority": "GovernmentService approved budget, agency, and ledger recordSpending; no duplicate account authority",
+  "regionalCivilStates": [
+    "normal",
+    "strained",
+    "restricted",
+    "recovering",
+    "stabilized"
+  ],
+  "impactIndicators": [
+    "transportReliability01",
+    "hospitalAvailability01",
+    "supplyReliability01",
+    "assistanceDemand01"
+  ],
+  "deterrence": "abstract narrative posture only, no engineering, specifications, procurement methods, targeting, or deployment",
+  "guardrails": [
+    "no tactical operations",
+    "no conflict escalation guidance",
+    "no weapon construction or acquisition",
+    "no violence depiction",
+    "non-graphic civilian welfare",
+    "non-partisan fictional scenario",
+    "no actual policy or election claims"
+  ],
+  "prototypeLimitations": [
+    "in-memory development-only API",
+    "no auth/authorization on dev routes",
+    "no connected durable storage",
+    "no real-world geography at operational resolution",
+    "no production force simulation"
+  ],
+  "source": "Unified master pp.31-32 and phase 41 p.58"
+}
