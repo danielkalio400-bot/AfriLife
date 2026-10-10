@@ -199,6 +199,15 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             if(_loop.CurrentStep=="interact-with-persistent-npcs")
                 GUILayout.Label("Stand near a named resident at the neighbor marker.");
             GUILayout.Label("Resident conversations: "+_loop.State.ConversationCount);
+            FirstNeighborhoodResidentAgent nearbyChat=ClosestResident();
+            if(nearbyChat!=null)
+            {
+                if(GUILayout.Button("Chat with "+nearbyChat.DisplayName+
+                    " (informal)",GUILayout.MinHeight(38)))
+                    FirstNeighborhoodResidentDialogue.TryChat(
+                        _loop,_actor,nearbyChat,out _message);
+            }
+            else GUILayout.Label("Walk near an awake neighbor for an informal chat.");
             if(GUILayout.Button(_journalVisible?"Hide neighborhood journal":
                 "Open neighborhood journal",GUILayout.MinHeight(38)))
                 _journalVisible=!_journalVisible;

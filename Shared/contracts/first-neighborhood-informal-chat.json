@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "bulk": 46,
+  "prototype": "fictional Lagos first-neighborhood blockout",
+  "residents": [
+    "Ada",
+    "Bola",
+    "Kwame"
+  ],
+  "contexts": [
+    "morning",
+    "daytime",
+    "evening"
+  ],
+  "availability": "within physical NPC interaction reach, awake in simulated 06:00–21:00 schedule",
+  "persistence": "informal dialogue is read-only; mandatory 17-step resident interaction records total conversation count in canonical save",
+  "rewards": "none from informal chat",
+  "coverage": "Android/iOS/Windows source and Node tests; Unity runtime unverified"
+}

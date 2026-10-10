@@ -30,7 +30,10 @@ namespace AfriLife.Core.Save
                state.WaitingSessionsDay < 0 ||
                state.WaitingSessionsDay > state.DaysCompleted ||
                state.WaitingSessionsToday < 0 ||
-               state.WaitingSessionsToday > FirstNeighborhoodWaitingService.MaxHourlyWaitsPerDay)
+               state.WaitingSessionsToday > FirstNeighborhoodWaitingService.MaxHourlyWaitsPerDay ||
+               state.ConversationCount<0 ||
+               state.LastConversationDay< -1 ||
+               state.LastConversationDay>state.DaysCompleted)
             {
                 reason="invalid-prototype-progress";
                 return false;

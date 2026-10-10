@@ -119,6 +119,10 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             {
                 state.ConversationCounts[existing]++;
             }
+            // The mandatory scripted interaction contributes to the
+            // canonical journal total. Informal read-only chat does not.
+            state.ConversationCount=Math.Min(100000,state.ConversationCount+1);
+            state.LastConversationDay=state.DaysCompleted;
             npc.Profile.Reputation=Math.Min(100f,npc.Profile.Reputation+1f);
             message="Spoke with "+npc.Profile.DisplayName+".";
             return true;
