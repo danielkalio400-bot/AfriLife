@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using AfriLife.Gameplay.FirstNeighborhood;
 using AfriLife.Presentation;
+using UnityEngine.AI;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -108,6 +109,11 @@ namespace AfriLife.Editor
             VerifyInstalled(Find(scene, "AfriLife Production Kwame"),
                 profile.KwamePrefab, "Kwame", false, true);
 
+            if (new[] { ada, bola, kwame }.Any(resident =>
+                resident.GetComponent<NavMeshAgent>() == null))
+                throw new InvalidOperationException(
+                    "Production residents require NavMeshAgent components. Bake a usable walkable NavMesh before Play Mode.");
+
             foreach (string name in new[] { "Ground - Prototype Square", "Home",
                 "Grocery Market", "Workplace", "Bank", "Clinic" })
             {
@@ -127,12 +133,32 @@ namespace AfriLife.Editor
             GameObject visual = EnsurePrefab(prefab, scene, resident.transform,
                 name, Vector3.down);
             EnsureMotionBridge(visual, resident.transform);
+            EnsureResidentNavigation(resident);
             Renderer oldRenderer = resident.GetComponent<Renderer>();
             if (oldRenderer != null && oldRenderer.enabled)
             {
                 Undo.RecordObject(oldRenderer, "Hide AfriLife resident capsule");
                 oldRenderer.enabled = false;
             }
+        }
+
+        // Production residents require authored/baked walkable Navigation surfaces.
+        // An agent without a baked NavMesh holds position rather than crossing walls.
+        private static void EnsureResidentNavigation(GameObject resident)
+        {
+            NavMeshAgent navigation = resident.GetComponent<NavMeshAgent>();
+            if (navigation == null) navigation = Undo.AddComponent<NavMeshAgent>(resident);
+            Undo.RecordObject(navigation, "Configure AfriLife resident pathfinding");
+            FirstNeighborhoodResidentAgent behavior =
+                resident.GetComponent<FirstNeighborhoodResidentAgent>();
+            navigation.speed = behavior != null ? Mathf.Max(0.2f, behavior.Speed) : 1.2f;
+            navigation.radius = 0.32f;
+            navigation.height = 1.8f;
+            // Original resident gameplay anchors are authored 1 meter above ground.
+            navigation.baseOffset = -1f;
+            navigation.acceleration = 7f;
+            navigation.angularSpeed = 480f;
+            navigation.stoppingDistance = 0.3f;
         }
 
         private static void EnsureMotionBridge(GameObject avatar, Transform actor)

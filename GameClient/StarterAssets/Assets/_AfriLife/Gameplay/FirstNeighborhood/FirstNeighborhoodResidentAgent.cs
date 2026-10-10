@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace AfriLife.Gameplay.FirstNeighborhood
 {
@@ -12,6 +13,18 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         [Range(1f,5f)] public float TalkReachMeters = 2.7f;
         public bool Available { get; private set; }
         private Vector3 _destination;
+        private NavMeshAgent _navigation;
+        private bool _destinationPending = true;
+
+        private void Awake()
+        {
+            _navigation = GetComponent<NavMeshAgent>();
+        }
+
+        private void OnEnable()
+        {
+            _destinationPending = true;
+        }
 
         public void SetDestination(string locationId, bool sleeping)
         {
@@ -24,18 +37,43 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 default: _destination=new Vector3(6f,0f,3f);break;
             }
             _destination.y=transform.position.y;
+            _destinationPending = true;
         }
 
         public void MoveTo(Vector3 destination)
         {
             _destination=new Vector3(destination.x,transform.position.y,destination.z);
             Available=true;
+            _destinationPending = true;
         }
 
         public bool CanConverse(Vector3 actorPosition) => InConversationRange(actorPosition);
 
         private void Update()
         {
+            if (_navigation != null && _navigation.enabled)
+            {
+                // Authored world navigation must be baked before the resident moves.
+                // Never fall through to a straight-line movement that crosses walls.
+                if (!_navigation.isOnNavMesh) return;
+                if (_destinationPending)
+                {
+                    _destinationPending = false;
+                    if (NavMesh.SamplePosition(_destination, out NavMeshHit navGoal,
+                        2.5f, NavMesh.AllAreas))
+                    {
+                        if (!_navigation.SetDestination(navGoal.position))
+                            Debug.LogWarning("Resident path could not be set for " + DisplayName, this);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Resident destination has no nearby baked NavMesh: " + DisplayName, this);
+                    }
+                }
+                return;
+            }
+
+            // Existing small blockout scenes without NavMeshAgents still work.
             Vector3 delta=_destination-transform.position;
             delta.y=0f;
             if(delta.sqrMagnitude<=0.01f)return;
