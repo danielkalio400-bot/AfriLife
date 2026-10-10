@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "bulk": 36,
+  "storage": "Unity Application.persistentDataPath",
+  "format": "alternating checksummed local save envelopes",
+  "hash": "SHA-256 over UTF-8 serialized WorldSaveData JSON",
+  "slots": [
+    "afrilife-local-world.json.slot-a",
+    "afrilife-local-world.json.slot-b"
+  ],
+  "legacy": "afrilife-local-world.json",
+  "sequence": "monotonic generation",
+  "read": "highest valid slot; legacy migration if neither slot valid",
+  "write": "stage verified .tmp file into inactive slot then promote; keep previous valid slot",
+  "dataLossPrevention": "never silently reset when persisted data exists but is unreadable",
+  "integrityGuarantees": [
+    "detect corrupted/incomplete writes and recover older slot",
+    "preserve legacy save during migration",
+    "world ID cross-check before replacement",
+    "read-after-write verification"
+  ],
+  "limitations": [
+    "no cross-device cloud saves",
+    "no encryption",
+    "last successfully saved checkpoint can be older than latest failed write",
+    "Unity device QA required",
+    "not a transactional filesystem or secure anti-cheat store"
+  ]
+}

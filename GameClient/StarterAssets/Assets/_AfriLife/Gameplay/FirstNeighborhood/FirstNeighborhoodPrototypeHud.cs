@@ -1,3 +1,4 @@
+using System;
 using AfriLife.Core.Save;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private float _nextAutoSave;
         private void Start()
         {
-            _loop=new FirstNeighborhoodPrototypeLoop(LocalWorldSaveStore.LoadOrCreate());
+            if(!TryLoadWorld(out _loop)) return;
             _actor=FindFirstObjectByType<FirstNeighborhoodWalkController>();
             _points=FindObjectsByType<FirstNeighborhoodInteractionPoint>(FindObjectsSortMode.None);
             _residents=FindObjectsByType<FirstNeighborhoodResidentAgent>(FindObjectsSortMode.None);
@@ -49,10 +50,38 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             if (_actor.HasMovedSinceCapture) SavePlayerPosition();
         }
 
-        private void SavePlayerPosition()
+        private static bool TryLoadWorld(out FirstNeighborhoodPrototypeLoop loop)
         {
+            loop=null;
+            try
+            {
+                loop=new FirstNeighborhoodPrototypeLoop(
+                    LocalWorldSaveStore.LoadOrCreate());
+                return true;
+            }
+            catch(Exception exception)
+            {
+                Debug.LogWarning("AfriLife local save requires recovery: "+
+                    exception.GetType().Name);
+                return false;
+            }
+        }
+
+        private bool SavePlayerPosition()
+        {
+            if(_loop==null)return false;
             _actor?.Capture(_loop.State);
-            LocalWorldSaveStore.Save(_loop.SaveData);
+            try
+            {
+                LocalWorldSaveStore.Save(_loop.SaveData);
+                return true;
+            }
+            catch(Exception exception)
+            {
+                _message="Save failed; a previous verified checkpoint remains. "+
+                    exception.GetType().Name;
+                return false;
+            }
         }
 
         private FirstNeighborhoodResidentAgent ClosestResident()
@@ -84,7 +113,15 @@ namespace AfriLife.Gameplay.FirstNeighborhood
 
         private void OnGUI()
         {
-            if(_loop==null || Application.isBatchMode)return;
+            if(Application.isBatchMode)return;
+            if(_loop==null)
+            {
+                GUI.Box(new Rect(Screen.safeArea.x+12,Screen.safeArea.y+12,
+                    Mathf.Min(470f,Screen.safeArea.width*0.92f),118f),
+                    "AfriLife save cannot be loaded. Preserve existing save slots; "+
+                    "do not reset player data.");
+                return;
+            }
             Rect safe=Screen.safeArea;
             float width=Mathf.Min(390f,safe.width*0.94f);
             float height=Mathf.Min(350f,safe.height*0.92f);
@@ -97,6 +134,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             GUILayout.Label("Progress: "+_loop.State.NextStep+"/"+FirstNeighborhoodPrototypeLoop.Steps.Length);
             GUILayout.Label("Funds (NGN minor units): "+_loop.CashMinorUnits);
             GUILayout.Label("Days completed: "+_loop.CompletedDays);
+            GUILayout.Label("Save verification: "+LocalWorldSaveStore.LastLoadStatus);
             GUILayout.Label("Known residents: "+_loop.Residents.Residents().Count);
             if(_loop.CurrentStep=="interact-with-persistent-npcs")
                 GUILayout.Label("Stand near a named resident at the neighbor marker.");
@@ -135,19 +173,20 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             {
                 if(GUILayout.Button("Save & reload to finish day",GUILayout.MinHeight(40)))
                 {
-                    SavePlayerPosition();
-                    var reloaded=LocalWorldSaveStore.LoadOrCreate();
-                    // Verify persisted identity and current step before marking success.
-                    if(reloaded.Header.WorldId==_loop.SaveData.Header.WorldId &&
-                        reloaded.FirstNeighborhoodPrototype!=null &&
-                        reloaded.FirstNeighborhoodPrototype.NextStep==16)
+                    if(SavePlayerPosition() && TryLoadWorld(out var reloaded))
                     {
-                        _loop=new FirstNeighborhoodPrototypeLoop(reloaded);
-                        _actor?.Restore(_loop.State);
-                                    _saveVerified=_loop.CompleteAfterVerifiedReload(out _message);
-                        if(_saveVerified)SavePlayerPosition();
+                        // Verify persisted identity and current action index.
+                        if(reloaded.SaveData.Header.WorldId==_loop.SaveData.Header.WorldId &&
+                            reloaded.State.NextStep==16)
+                        {
+                            _loop=reloaded;
+                            _actor?.Restore(_loop.State);
+                            _saveVerified=_loop.CompleteAfterVerifiedReload(out _message);
+                            if(_saveVerified)SavePlayerPosition();
+                        }
+                        else _message="Save verification failed; progress unchanged.";
                     }
-                    else _message="Save verification failed; progress unchanged.";
+                    else _message="Cannot complete day until saved state is recoverable.";
                 }
             }
             else if(_loop.CurrentStep=="complete")
@@ -180,9 +219,13 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             }
             if(GUILayout.Button("Reload saved state",GUILayout.MinHeight(38)))
             {
-                _loop=new FirstNeighborhoodPrototypeLoop(LocalWorldSaveStore.LoadOrCreate());
-                _actor?.Restore(_loop.State);
-                    _message="Reloaded saved neighborhood state and player position.";
+                if(TryLoadWorld(out var reloaded))
+                {
+                    _loop=reloaded;
+                    _actor?.Restore(_loop.State);
+                    _message="Reloaded verified neighborhood state and player position.";
+                }
+                else _message="Save slots are corrupt. Preserve files for recovery.";
             }
             GUILayout.Label(_message);
             GUILayout.EndScrollView();
