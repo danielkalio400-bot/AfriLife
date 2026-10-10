@@ -42,7 +42,6 @@ namespace AfriLife.Editor
 
             System.IO.Directory.CreateDirectory("Assets/_AfriLife/Scenes");
             FirstNeighborhoodWalkLayerBuilder.AddToScene(scene);
-            FirstNeighborhoodResidentSceneBuilder.AddToScene(scene);
             EditorSceneManager.SaveScene(scene,path);
             AssetDatabase.Refresh();
             EditorUtility.DisplayDialog("Prototype created",

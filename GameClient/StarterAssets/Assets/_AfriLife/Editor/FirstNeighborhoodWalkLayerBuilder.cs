@@ -24,7 +24,6 @@ namespace AfriLife.Editor
             }
             Scene scene=EditorSceneManager.OpenScene(ScenePath,OpenSceneMode.Single);
             AddToScene(scene);
-            FirstNeighborhoodResidentSceneBuilder.AddToScene(scene);
             EditorSceneManager.SaveScene(scene,ScenePath);
             AssetDatabase.Refresh();
         }
