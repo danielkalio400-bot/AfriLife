@@ -82,7 +82,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 {
                     npc.CurrentActivity = NpcScheduleActivity.Work;
                     npc.CurrentLocationId =
-                        npc.Profile.Id == "prototype-resident-kwame" ? "park" : "market";
+                        npc.Profile.Id == "prototype-resident-ada" ? "neighbor" :
+                            npc.Profile.Id == "prototype-resident-kwame" ? "park" : "market";
                     npc.Sleeping = false;
                 }
                 else

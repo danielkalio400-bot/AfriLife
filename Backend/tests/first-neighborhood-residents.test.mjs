@@ -42,14 +42,16 @@ test("HUD guards NPC interaction and loop uses social persistence before step",(
  assert.doesNotMatch(loop,/gateSatisfied\s*=\s*true/);
 });
 
-test("resident director shares Ada saved identity, movement and conversation API",()=>{
- const director=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodResidentDirector.cs");
+test("canonical resident service remains the only conversation and schedule authority",()=>{
  const agent=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodResidentAgent.cs");
  const scene=unity("Editor/FirstNeighborhoodResidentSceneBuilder.cs");
- assert.match(director,/Resident.MoveTo\(destination\)/);
- assert.match(director,/Resident.CanConverse\(playerPosition\)/);
- assert.match(agent,/public void MoveTo\(Vector3 destination\)/);
- assert.match(agent,/public bool CanConverse\(Vector3 actorPosition\)/);
+ const hud=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodPrototypeHud.cs");
+ const service=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodResidentService.cs");
+ assert.match(agent,/public bool InConversationRange/);
  assert.match(scene,/prototype-resident-ada/);
  assert.match(scene,/Resident - Ada/);
+ assert.doesNotMatch(scene,/AddComponent<FirstNeighborhoodResidentDirector>/);
+ assert.doesNotMatch(hud,/FirstNeighborhoodResidentDirector/);
+ assert.match(service,/prototype-resident-ada" \? "neighbor"/);
+ assert.match(hud,/_loop.TryAdvance\(out _message,agent.ResidentId\)/);
 });

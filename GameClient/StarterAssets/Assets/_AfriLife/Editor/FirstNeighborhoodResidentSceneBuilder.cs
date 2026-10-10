@@ -44,9 +44,6 @@ namespace AfriLife.Editor
             if(agent==null)agent=root.AddComponent<FirstNeighborhoodResidentAgent>();
             agent.ResidentId="prototype-resident-ada";
             agent.DisplayName="Ada";
-            var director=root.GetComponent<FirstNeighborhoodResidentDirector>();
-            if(director==null)director=root.AddComponent<FirstNeighborhoodResidentDirector>();
-            director.Resident=agent;
             EditorSceneManager.MarkSceneDirty(scene);
         }
 
