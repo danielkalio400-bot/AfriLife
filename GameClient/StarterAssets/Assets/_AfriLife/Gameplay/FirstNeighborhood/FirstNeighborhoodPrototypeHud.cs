@@ -12,6 +12,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private bool _saveVerified;
         private bool _journalVisible;
         private int _journalPage;
+        private string _journalGuideSite=string.Empty;
         private readonly string[] _errandLabels = {
             "Clinic check-in - NGN 1.20","Market supplies - NGN 1.80",
             "Park cleanup - NGN 0.75 earned","Help a neighbor"
@@ -154,6 +155,18 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                     : "Next: "+route.Name+" | "+route.Direction+" | "+distance+" straight-line");
             }
             else GUILayout.Label("Destination marker unavailable. Validate the demo scene.");
+            if(!string.IsNullOrEmpty(_journalGuideSite))
+            {
+                if(_actor!=null && FirstNeighborhoodLandmarkGuide.TryGetCue(
+                    _journalGuideSite,_actor.transform.position,_points,
+                    out var landmarkCue))
+                    GUILayout.Label(landmarkCue.Arrived
+                        ?"Journal destination reached: "+landmarkCue.Name
+                        :"Journal route: "+landmarkCue.Name+" | "+
+                        landmarkCue.Direction+" | "+
+                        Mathf.CeilToInt(landmarkCue.DirectMeters)+" m direct");
+                else GUILayout.Label("Journal guide: landmark marker unavailable.");
+            }
             GUILayout.Label("Keyboard WASD/arrows or touch direction pad to move.");
             GUILayout.Label("Progress: "+_loop.State.NextStep+"/"+FirstNeighborhoodPrototypeLoop.Steps.Length);
             GUILayout.Label("Funds (NGN minor units): "+_loop.CashMinorUnits);
@@ -199,6 +212,31 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 GUILayout.EndHorizontal();
                 GUILayout.Label(FirstNeighborhoodJournal.Render(
                     _loop.State,_journalPage));
+                if(_journalPage==1)
+                {
+                    if(GUILayout.Button("Guide to nearest undiscovered landmark",
+                        GUILayout.MinHeight(36)))
+                    {
+                        if(_actor!=null && FirstNeighborhoodLandmarkGuide.TryNearestUndiscovered(
+                            _loop.State,_actor.transform.position,_points,out var next))
+                        {
+                            _journalGuideSite=next.SiteId;
+                            _message="Following "+next.Name+" from the journal.";
+                        }
+                        else _message="No undiscovered scene landmark is available.";
+                    }
+                    foreach(string siteId in FirstNeighborhoodLandmarkService.SiteIds)
+                    {
+                        if(GUILayout.Button("Guide to: "+siteId,GUILayout.MinHeight(32)))
+                        {
+                            _journalGuideSite=siteId;
+                            _message="Selected "+siteId+" as an optional compass destination.";
+                        }
+                    }
+                    if(!string.IsNullOrEmpty(_journalGuideSite) &&
+                       GUILayout.Button("Clear journal guide",GUILayout.MinHeight(32)))
+                        _journalGuideSite=string.Empty;
+                }
             }
             GUILayout.Label("Physical movement with scripted interactions; not a complete open world.");
             GUILayout.Label("Optional neighborhood errands (once per game day):");

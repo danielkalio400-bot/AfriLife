@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "bulk": 45,
+  "feature": "player-selected direct compass navigation to authored neighborhood landmark",
+  "entry": "Places page of existing world-save-backed journal",
+  "targets": [
+    "home",
+    "market",
+    "workplace",
+    "bank",
+    "park",
+    "neighbor",
+    "clinic"
+  ],
+  "selection": [
+    "nearest undiscovered physically authored marker",
+    "any manually chosen known site",
+    "clear current guide"
+  ],
+  "direction": "N/S/E/W/HERE, XZ planar straight-line distance only",
+  "state": "HUD-local ephemeral selected destination; discoveries remain in canonical world save",
+  "effects": {
+    "playerTeleport": false,
+    "automaticInteraction": false,
+    "walletWrites": false,
+    "ranking": false
+  },
+  "constraints": [
+    "world markers must actually exist",
+    "no invented GPS, road routes or ETA",
+    "Unity/device build still unverified"
+  ]
+}
