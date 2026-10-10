@@ -226,6 +226,14 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             return result.Success;
         }
 
+        // Single needs authority: side activities update the same buffered
+        // NeedsState used by the scripted daily-life actions and world save.
+        public void AdjustNeed(NeedType type, float delta)
+        {
+            _needs.Adjust(type, delta);
+            StoreNeeds();
+        }
+
         private void StoreNeeds()
         {
             _save.Player.Needs.Clear();

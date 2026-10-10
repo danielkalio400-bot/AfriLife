@@ -9,6 +9,10 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private Vector2 _scroll;
         private string _message="Use the action button to follow the first day.";
         private bool _saveVerified;
+        private readonly string[] _errandLabels = {
+            "Clinic check-in - NGN 1.20","Market supplies - NGN 1.80",
+            "Park cleanup - NGN 0.75 earned","Help a neighbor"
+        };
         private FirstNeighborhoodWalkController _actor;
         private FirstNeighborhoodInteractionPoint[] _points;
         private FirstNeighborhoodResidentAgent[] _residents;
@@ -98,6 +102,35 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 GUILayout.Label("Stand near a named resident at the neighbor marker.");
             GUILayout.Label("Resident conversations: "+_loop.State.ConversationCount);
             GUILayout.Label("Physical movement with scripted interactions; not a complete open world.");
+            GUILayout.Label("Optional neighborhood errands (once per game day):");
+            for(int i=0;i<FirstNeighborhoodErrandService.ErrandIds.Length;i++)
+            {
+                string errandId=FirstNeighborhoodErrandService.ErrandIds[i];
+                var errands=new FirstNeighborhoodErrandService(_loop);
+                bool available=errands.CanCompleteToday(errandId);
+                GUI.enabled=available;
+                if(GUILayout.Button(_errandLabels[i]+(available?"":" [completed]"),GUILayout.MinHeight(34)))
+                {
+                    string site=FirstNeighborhoodErrandService.RequiredSite(errandId);
+                    if(_actor==null || !FirstNeighborhoodInteractionPolicy.CanPerformSite(
+                        site,_actor.transform.position,_points,out _message))
+                    {
+                        // A physical approach is required.
+                    }
+                    else
+                    {
+                        string residentId=string.Empty;
+                        if(errandId=="neighbor-help")
+                        {
+                            var resident=ClosestResident();
+                            residentId=resident!=null?resident.ResidentId:string.Empty;
+                        }
+                        if(errands.TryComplete(errandId,site,residentId,out _message))
+                            SavePlayerPosition();
+                    }
+                }
+                GUI.enabled=true;
+            }
             if(_loop.CurrentStep=="save-and-reload")
             {
                 if(GUILayout.Button("Save & reload to finish day",GUILayout.MinHeight(40)))

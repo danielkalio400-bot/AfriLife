@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "bulk": 35,
+  "scope": "optional-walk-to-interact-side-activities",
+  "currency": "NGN",
+  "unit": "minor-units",
+  "activities": [
+    {
+      "id": "clinic-checkin",
+      "siteId": "clinic",
+      "costMinorUnits": 120,
+      "benefit": "health +5"
+    },
+    {
+      "id": "market-supplies",
+      "siteId": "market",
+      "costMinorUnits": 180,
+      "inventoryItem": "prototype-neighborhood-supplies"
+    },
+    {
+      "id": "park-cleanup",
+      "siteId": "park",
+      "earnMinorUnits": 75,
+      "benefit": "comfort +4"
+    },
+    {
+      "id": "neighbor-help",
+      "siteId": "neighbor",
+      "requiresNamedResident": true,
+      "benefit": "social +5"
+    }
+  ],
+  "invariants": [
+    "once per activity per in-game day",
+    "no debit on duplicate or insufficient funds",
+    "all credits and debits use existing WorldSaveData.Player.Wallet",
+    "completed receipts persist with the local world save",
+    "neighbor action requires a physically nearby awake resident",
+    "scripted daily-life 17-step loop remains independent"
+  ],
+  "notImplemented": [
+    "real clinic simulation",
+    "health treatment",
+    "production wage rates or tariffs",
+    "NPC natural language conversation",
+    "Unity Editor or device compile verification",
+    "nationwide scene rollout"
+  ]
+}

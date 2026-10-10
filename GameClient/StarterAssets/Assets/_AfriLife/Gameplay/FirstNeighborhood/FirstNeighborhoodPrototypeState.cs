@@ -19,6 +19,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         public float PlayerX;
         public float PlayerZ;
         public string[] CompletedSteps = Array.Empty<string>();
+        public System.Collections.Generic.List<FirstNeighborhoodErrandReceipt> ErrandReceipts = new();
         public string[] ConversationResidentIds = Array.Empty<string>();
         public int[] ConversationCounts = Array.Empty<int>();
 
@@ -33,6 +34,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             if (CompletedSteps.Length > NextStep)
                 Array.Resize(ref CompletedSteps, NextStep);
             CurrentLocation ??= "home";
+            ErrandReceipts ??= new System.Collections.Generic.List<FirstNeighborhoodErrandReceipt>();
+            ErrandReceipts.RemoveAll(item => item == null || item.CompletedDay < 0 || string.IsNullOrWhiteSpace(item.ErrandId));
             ConversationResidentIds ??= Array.Empty<string>();
             ConversationCounts ??= Array.Empty<int>();
             if (ConversationResidentIds.Length != ConversationCounts.Length)

@@ -54,6 +54,7 @@ namespace AfriLife.Editor
             AddMarker("bank","Bill Payment Bank",-7f,7.3f);
             AddMarker("park","Small Activity Park",2f,2f);
             AddMarker("neighbor","Neighbor Gathering Spot",6f,3.0f);
+            AddClinicMarker();
             AddResidents();
 
             Camera camera=Camera.main;
@@ -66,6 +67,22 @@ namespace AfriLife.Editor
             }
 
             EditorSceneManager.MarkSceneDirty(scene);
+        }
+
+        [MenuItem("AfriLife/Add Clinic Errand Marker")]
+        public static void UpgradeClinic()
+        {
+            if(!System.IO.File.Exists(ScenePath))return;
+            Scene scene=EditorSceneManager.OpenScene(ScenePath,OpenSceneMode.Single);
+            AddClinicMarker();
+            EditorSceneManager.SaveScene(scene,ScenePath);
+            AssetDatabase.Refresh();
+        }
+
+        private static void AddClinicMarker()
+        {
+            if(GameObject.Find("Interact - Clinic Reception")!=null)return;
+            AddMarker("clinic","Clinic Reception",0f,8.9f);
         }
 
         private static void AddResidents()

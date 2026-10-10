@@ -22,7 +22,17 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         public static bool CanPerform(string step, Vector3 playerPosition,
             FirstNeighborhoodInteractionPoint[] points, out string reason)
         {
-            string site = RequiredSite(step);
+            return CanPerformSite(RequiredSite(step),playerPosition,points,out reason);
+        }
+
+        public static bool CanPerformSite(string site, Vector3 playerPosition,
+            FirstNeighborhoodInteractionPoint[] points, out string reason)
+        {
+            if (string.IsNullOrWhiteSpace(site))
+            {
+                reason="Unknown interaction location.";
+                return false;
+            }
             if (points != null)
             {
                 foreach (FirstNeighborhoodInteractionPoint point in points)
