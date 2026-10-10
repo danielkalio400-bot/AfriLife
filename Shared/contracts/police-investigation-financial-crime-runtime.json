@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "phase": 27,
+  "systems": [
+    "police-patrol",
+    "traffic-enforcement",
+    "arrest-records",
+    "statements",
+    "evidence",
+    "cid-investigations",
+    "cybercrime-investigation-high-level",
+    "financial-fraud-investigation",
+    "fictional-financial-crime-agency",
+    "suspicious-transactions",
+    "asset-freezing-through-legal-process",
+    "authorized-search-arrest-operation-records",
+    "evidence-chain",
+    "agency-cooperation"
+  ],
+  "designRule": "Investigation and enforcement are abstract, lawful, consequence-focused systems. No hacking methods, evasion techniques, tactical raid instructions, or real criminal procedures are provided."
+}
