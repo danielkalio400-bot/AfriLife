@@ -20,6 +20,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private FirstNeighborhoodResidentAgent[] _residents;
         private float _nextScheduleRefresh;
         private float _nextAutoSave;
+        private float _nextLandmarkCheck;
         private void Start()
         {
             if(!TryLoadWorld(out _loop)) return;
@@ -30,6 +31,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             _nextScheduleRefresh=Time.unscaledTime;
             if (_actor!=null)_actor.Restore(_loop.State);
             _nextAutoSave=Time.unscaledTime+6f;
+            _nextLandmarkCheck=Time.unscaledTime;
         }
 
         private void Update()
@@ -45,6 +47,15 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                     var npc=_loop.Residents.Find(agent.ResidentId);
                     if(npc==null)continue;
                     agent.SetDestination(npc.CurrentLocationId,npc.Sleeping);
+                }
+            }
+            if(_actor!=null && Time.unscaledTime>=_nextLandmarkCheck)
+            {
+                _nextLandmarkCheck=Time.unscaledTime+0.5f;
+                var discovery=new FirstNeighborhoodLandmarkService(_loop);
+                if(discovery.DiscoverNear(_actor,_points,out string discoveredName))
+                {
+                    if(SavePlayerPosition()) _message=discoveredName;
                 }
             }
             if (_actor==null || Time.unscaledTime < _nextAutoSave)return;
@@ -165,6 +176,11 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 }
             }
             GUILayout.Label("Known residents: "+_loop.Residents.Residents().Count);
+            var landmarks=new FirstNeighborhoodLandmarkService(_loop);
+            GUILayout.Label("Discovered neighborhood landmarks: "+landmarks.Count+
+                "/"+FirstNeighborhoodLandmarkService.SiteIds.Length);
+            foreach(string landmark in FirstNeighborhoodLandmarkService.SiteIds)
+                GUILayout.Label((landmarks.WasDiscovered(landmark)?"Visited: ":"Undiscovered: ")+landmark);
             if(_loop.CurrentStep=="interact-with-persistent-npcs")
                 GUILayout.Label("Stand near a named resident at the neighbor marker.");
             GUILayout.Label("Resident conversations: "+_loop.State.ConversationCount);

@@ -49,6 +49,25 @@ namespace AfriLife.Core.Save
                     return false;
                 }
             }
+            if(state.DiscoveredSiteIds!=null)
+            {
+                if(state.DiscoveredSiteIds.Length>
+                   FirstNeighborhoodLandmarkService.SiteIds.Length)
+                {
+                    reason="oversized-landmark-ledger";
+                    return false;
+                }
+                var discovered=new HashSet<string>(StringComparer.Ordinal);
+                foreach(string id in state.DiscoveredSiteIds)
+                {
+                    if(!FirstNeighborhoodLandmarkService.IsKnownSite(id) ||
+                       !discovered.Add(id))
+                    {
+                        reason="duplicate-or-unknown-landmark";
+                        return false;
+                    }
+                }
+            }
             if(state.ErrandReceipts!=null)
             {
                 if(state.ErrandReceipts.Count>50000)

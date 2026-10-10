@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "bulk": 42,
+  "prototype": "original Lagos first neighborhood walkable blockout",
+  "landmarks": [
+    "home",
+    "market",
+    "workplace",
+    "bank",
+    "park",
+    "neighbor",
+    "clinic"
+  ],
+  "discovery": "player walks inside the existing scene interaction marker radius",
+  "persistence": "DiscoveredSiteIds saved in canonical FirstNeighborhoodPrototypeState through dual-slot store",
+  "idempotency": "one discovery per landmark throughout save lifetime",
+  "economicEffects": "none",
+  "playerRewards": "none",
+  "integrity": [
+    "known site IDs only",
+    "no duplicates",
+    "maximum seven entries"
+  ],
+  "limitations": [
+    "not GPS or real Lagos city data",
+    "no physical Unity Play Mode test",
+    "no compiled mobile or Windows build",
+    "no real national open world"
+  ]
+}
