@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "systems": [
+    "generator-ownership",
+    "fuel-consumption",
+    "maintenance",
+    "solar-arrays",
+    "inverters",
+    "battery-storage",
+    "battery-health",
+    "hybrid-switching",
+    "maintenance-businesses"
+  ],
+  "designRule": "Model backup energy as game simulation state. Do not encode real-world hazardous operating instructions."
+}

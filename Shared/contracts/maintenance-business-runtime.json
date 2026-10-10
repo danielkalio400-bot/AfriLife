@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "serviceTypes": [
+    "generator-service",
+    "solar-service",
+    "battery-service",
+    "electrical-repair",
+    "telecom-repair",
+    "vehicle-service",
+    "home-repair"
+  ],
+  "systems": ["work-orders", "staff", "progress", "pricing", "completion"]
+}

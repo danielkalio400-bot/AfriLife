@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "fuelTypes": ["petrol", "diesel", "jet-fuel", "lpg", "marine-fuel"],
+  "systems": [
+    "stations",
+    "depots",
+    "reserves",
+    "inventory",
+    "delivery",
+    "shortage-events",
+    "cross-border-trade"
+  ],
+  "designRule": "Fuel handling is represented abstractly through safe inventory and logistics state."
+}

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "systems": [
+    "airtime",
+    "data-bundles",
+    "expiry",
+    "provider",
+    "roaming",
+    "billing",
+    "outage-awareness"
+  ],
+  "rule": "Bundle prices are game-balance values, not live real-world tariffs."
+}
