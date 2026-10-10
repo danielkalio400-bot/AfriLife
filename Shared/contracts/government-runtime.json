@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "phase": 35,
+  "systems": [
+    "president",
+    "ministers",
+    "governors",
+    "legislature",
+    "agencies",
+    "budgets",
+    "public-projects",
+    "salaries",
+    "treasury",
+    "public-spending",
+    "audits",
+    "procurement",
+    "elections",
+    "public-approval",
+    "government-services"
+  ],
+  "politicsRule": "Government and election systems use fictional game people, fictional parties and neutral simulation rules. They do not endorse real candidates, parties or political viewpoints.",
+  "economyRule": "Budgets, salaries, procurement, treasury values and election outcomes are fictional simulation data, not claims about Nigerian or Ghanaian public finances or law."
+}
