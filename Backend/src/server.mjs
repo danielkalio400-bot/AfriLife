@@ -1,6 +1,13 @@
 import { createServer } from "node:http";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
+import { handleWorldReference } from "./routes/world-reference.mjs";
+import {
+  nigeriaReference,
+  ghanaReference,
+  crossBorderReference,
+  researchSources,
+} from "./world-reference.mjs";
 import {
   cityCatalog,
   systemRegistry,
@@ -62,6 +69,13 @@ export function makeServer() {
     if (req.method === "GET" && path === "/v1/education") return send(res, 200, educationCatalog);
     if (req.method === "GET" && path === "/v1/neighborhood-template") return send(res, 200, neighborhoodTemplate);
     if (req.method === "GET" && path === "/v1/vehicles") return send(res, 200, vehicleCatalog);
+
+    if (handleWorldReference(req, res, path, {
+      nigeria: nigeriaReference,
+      ghana: ghanaReference,
+      crossBorder: crossBorderReference,
+      sources: researchSources,
+    })) return;
 
     return send(res, 404, { error: "not_found" });
   });

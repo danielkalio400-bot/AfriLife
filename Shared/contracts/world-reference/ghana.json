@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "countryId": "Ghana",
+  "displayName": "Ghana",
+  "currency": "GHS",
+  "trafficSide": "right",
+  "priorityCities": ["Accra", "Kumasi", "Tema", "Takoradi", "Tamale", "CapeCoast"],
+  "climateArchetypes": [
+    "coastal-humid",
+    "forest",
+    "forest-savanna-transition",
+    "guinea-savanna"
+  ],
+  "transportArchetypes": [
+    "trotro-minibus",
+    "city-bus",
+    "shared-taxi",
+    "ride-hailing",
+    "brt-development",
+    "rail",
+    "coach"
+  ],
+  "simulationAnchors": {
+    "power": [
+      "grid-electricity",
+      "renewable-energy",
+      "natural-gas-linked-generation",
+      "electric-mobility-growth"
+    ],
+    "telecom": [
+      "mobile-data-first",
+      "high-mobile-subscription-density",
+      "coverage-obligation-by-district",
+      "5g-expansion-phase"
+    ],
+    "transport": [
+      "trotro-and-bus-mix",
+      "integrated-ticketing-potential",
+      "accra-congestion",
+      "intercity-coaches"
+    ]
+  },
+  "sourcePolicy": "Use current official Ghanaian sources for live balancing; do not hard-code volatile subscription, tariff or inflation values into core gameplay."
+}

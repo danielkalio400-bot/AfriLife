@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "countries": ["Nigeria", "Ghana"],
+  "systems": [
+    "passport-and-immigration",
+    "currency-exchange",
+    "telecom-roaming",
+    "road-coach-travel",
+    "air-travel",
+    "shipping",
+    "banking",
+    "customs",
+    "trade-contracts"
+  ],
+  "designRule": "Cross-border systems must be simulated through owned services, schedules, documents, prices and capacity rather than instant menu teleportation."
+}

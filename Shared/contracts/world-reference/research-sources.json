@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "reviewedOctober2026": true,
+  "sources": [
+    {
+      "id": "ng-nimet",
+      "authority": "Nigerian Meteorological Agency",
+      "topics": ["seasonal-rainfall", "temperature", "flood-risk", "harmattan"]
+    },
+    {
+      "id": "ng-nerc",
+      "authority": "Nigerian Electricity Regulatory Commission",
+      "topics": ["metering", "distribution", "state-electricity-regulation"]
+    },
+    {
+      "id": "ng-ncc",
+      "authority": "Nigerian Communications Commission",
+      "topics": ["coverage", "subscriber-data", "network-performance"]
+    },
+    {
+      "id": "gh-gss",
+      "authority": "Ghana Statistical Service",
+      "topics": ["population", "urbanization", "economy"]
+    },
+    {
+      "id": "gh-nca",
+      "authority": "National Communications Authority Ghana",
+      "topics": ["mobile-data", "network-coverage", "5g"]
+    },
+    {
+      "id": "gh-energy",
+      "authority": "Energy Commission Ghana",
+      "topics": ["electricity", "renewables", "electric-mobility"]
+    },
+    {
+      "id": "gh-transport",
+      "authority": "Ghana Ministry of Transport / DVLA / Ghana Highway Authority",
+      "topics": ["public-transport", "road-rules", "traffic-side"]
+    }
+  ]
+}

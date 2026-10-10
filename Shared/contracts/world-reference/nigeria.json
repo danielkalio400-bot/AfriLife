@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "countryId": "Nigeria",
+  "displayName": "Nigeria",
+  "currency": "NGN",
+  "trafficSide": "right",
+  "priorityCities": ["Lagos", "Abuja", "PortHarcourt", "Kano", "Ibadan", "Enugu"],
+  "climateArchetypes": [
+    "coastal-humid",
+    "rainforest",
+    "guinea-savanna",
+    "sudan-savanna",
+    "sahel"
+  ],
+  "transportArchetypes": [
+    "city-bus",
+    "minibus",
+    "shared-taxi",
+    "ride-hailing",
+    "coach",
+    "rail",
+    "ferry"
+  ],
+  "simulationAnchors": {
+    "power": [
+      "metered-and-unmetered-households",
+      "distribution-company-regions",
+      "state-level-regulatory-variation",
+      "backup-generation-and-solar"
+    ],
+    "telecom": [
+      "mobile-data-first",
+      "coverage-varies-by-corridor",
+      "operator-quality-varies-by-region",
+      "tower-backup-power-matters"
+    ],
+    "weather": [
+      "rainfall-onset-and-cessation",
+      "flood-risk-events",
+      "harmattan-in-relevant-regions",
+      "heat-and-dry-spells"
+    ]
+  },
+  "sourcePolicy": "Use current official Nigerian sources for live balancing; do not hard-code volatile subscriber, tariff or inflation values into core gameplay."
+}
