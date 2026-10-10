@@ -55,6 +55,9 @@ import { centralBankEconomyRuntime } from "./central-bank-contracts.mjs";
 import { handleNationalRevenueDividend } from "./routes/national-revenue-dividend.mjs";
 import { NationalRevenueDividendService } from "./services/national-revenue-dividend.mjs";
 import { nationalRevenueDividendRuntime } from "./national-revenue-contracts.mjs";
+import { handleWeatherEnvironment } from "./routes/weather-environment.mjs";
+import { WeatherEnvironmentService } from "./services/weather-environment.mjs";
+import { weatherEnvironmentRuntime } from "./weather-environment-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -122,6 +125,7 @@ export function makeServer() {
   const government = new GovernmentService();
   const centralBankEconomy = new CentralBankEconomyService();
   const nationalRevenueDividend = new NationalRevenueDividendService();
+  const weatherEnvironment = new WeatherEnvironmentService();
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -179,6 +183,7 @@ export function makeServer() {
         government: "local-fictional-neutral-simulation-prototype",
         centralBankEconomy: "local-fictional-macro-state-prototype",
         nationalRevenueDividend: "local-fictional-public-finance-prototype",
+        weatherEnvironment: "local-normalized-environment-effects-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -315,6 +320,11 @@ export function makeServer() {
     if (await handleNationalRevenueDividend(req, res, path, {
       finance: nationalRevenueDividend,
       contract: nationalRevenueDividendRuntime,
+    })) return;
+
+    if (await handleWeatherEnvironment(req, res, path, {
+      weather: weatherEnvironment,
+      contract: weatherEnvironmentRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });

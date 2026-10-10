@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "phase": 38,
+  "systems": [
+    "rain",
+    "storms",
+    "heat",
+    "fog",
+    "flooding",
+    "wet-roads",
+    "wind",
+    "seasonal-weather",
+    "solar-output-changes",
+    "flight-disruption",
+    "ship-disruption",
+    "power-grid-damage",
+    "agricultural-impact"
+  ],
+  "countries": ["Nigeria", "Ghana"],
+  "designRule": "Weather and environmental effects are fictional simulation state. They are not live forecasts, disaster warnings, navigation advice, or claims about current Nigerian or Ghanaian conditions.",
+  "impactRule": "Cross-system effects are normalized gameplay multipliers and disruption scores, not real engineering or meteorological calculations."
+}
