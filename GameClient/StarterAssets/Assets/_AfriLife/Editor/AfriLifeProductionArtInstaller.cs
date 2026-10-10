@@ -86,13 +86,38 @@ namespace AfriLife.Editor
             Scene scene = SceneManager.GetActiveScene();
             if (!scene.isLoaded || scene.path != ScenePath)
                 throw new InvalidOperationException("Open the saved First Neighborhood scene.");
-            if (Find(scene, "AfriLife Production Neighborhood") == null ||
-                Find(scene, "AfriLife Production Player") == null ||
-                Find(scene, "AfriLife Production Ada") == null ||
-                Find(scene, "AfriLife Production Bola") == null ||
-                Find(scene, "AfriLife Production Kwame") == null)
-                throw new InvalidOperationException("The realistic model references are incomplete.");
-            Debug.Log("AfriLife production prefab references found. Manual realism, collision and hardware QA is still required.");
+            AfriLifeProductionArtProfile profile = LoadProfile();
+            GameObject player = Find(scene, "AfriLife Walkable Player");
+            GameObject ada = Find(scene, "Resident - Ada");
+            GameObject bola = Find(scene, "Resident - Bola");
+            GameObject kwame = Find(scene, "Resident - Kwame");
+            if (player == null || ada == null || bola == null || kwame == null ||
+                player.GetComponent<FirstNeighborhoodWalkController>() == null ||
+                new[] { ada, bola, kwame }.Any(obj =>
+                    obj.GetComponent<FirstNeighborhoodResidentAgent>() == null))
+                throw new InvalidOperationException("Gameplay actors are incomplete.");
+
+            VerifyInstalled(Find(scene, "AfriLife Production Neighborhood"),
+                profile.NeighborhoodPrefab, "neighborhood", true, false);
+            VerifyInstalled(Find(scene, "AfriLife Production Player"),
+                profile.PlayerPrefab, "player", false, true);
+            VerifyInstalled(Find(scene, "AfriLife Production Ada"),
+                profile.AdaPrefab, "Ada", false, true);
+            VerifyInstalled(Find(scene, "AfriLife Production Bola"),
+                profile.BolaPrefab, "Bola", false, true);
+            VerifyInstalled(Find(scene, "AfriLife Production Kwame"),
+                profile.KwamePrefab, "Kwame", false, true);
+
+            foreach (string name in new[] { "Ground - Prototype Square", "Home",
+                "Grocery Market", "Workplace", "Bank", "Clinic" })
+            {
+                GameObject blockout = FindSceneRoot(scene, name);
+                if (blockout != null && blockout.GetComponent<Renderer>() is Renderer legacy &&
+                    legacy.enabled)
+                    throw new InvalidOperationException("Blockout renderer remains visible: " + name);
+            }
+
+            Debug.Log("AfriLife installed prefab sources, enabled humanoid controllers and physical world colliders verified. Manual realism and device QA remain required.");
         }
 
         private static void ReplaceResident(Scene scene, GameObject resident, GameObject prefab)
@@ -184,11 +209,56 @@ namespace AfriLife.Editor
             return instance;
         }
 
+        // Verify artist-imported prefab identity and active runtime components.
+        // A same-named empty GameObject must never pass as realistic production art.
+        private static void VerifyInstalled(GameObject instance, GameObject expected,
+            string label, bool requireCollider, bool requireHumanoid)
+        {
+            if (instance == null || !instance.activeInHierarchy)
+                throw new InvalidOperationException("Missing or inactive production " + label);
+            GameObject source = PrefabUtility.GetCorrespondingObjectFromSource(instance);
+            if (expected == null || source != expected)
+                throw new InvalidOperationException(
+                    "Production " + label + " is not the prefab assigned in the art profile.");
+
+            if (!instance.GetComponentsInChildren<Renderer>(true)
+                .Any(renderer => renderer != null && renderer.enabled &&
+                    renderer.gameObject.activeInHierarchy))
+                throw new InvalidOperationException(
+                    "Production " + label + " needs an active visible renderer.");
+
+            if (requireCollider && !instance.GetComponentsInChildren<Collider>(true)
+                .Any(collider => collider != null && collider.enabled &&
+                    collider.gameObject.activeInHierarchy && !collider.isTrigger))
+                throw new InvalidOperationException(
+                    "Production " + label + " needs physical, enabled, non-trigger colliders.");
+
+            if (requireHumanoid && !instance.GetComponentsInChildren<Animator>(true)
+                .Any(animator => animator != null && animator.enabled &&
+                    animator.gameObject.activeInHierarchy &&
+                    animator.avatar != null && animator.avatar.isHuman &&
+                    animator.runtimeAnimatorController != null))
+                throw new InvalidOperationException(
+                    "Production " + label + " needs an enabled Humanoid Animator Controller.");
+        }
+
         private static void HideLegacyObject(GameObject obj)
         {
-            if (obj == null || !obj.activeSelf) return;
-            Undo.RecordObject(obj, "Hide AfriLife blockout object");
-            obj.SetActive(false);
+            if (obj == null) return;
+            // A blockout root can contain locally authored scripts, markers or props.
+            // Suppress only that root's original primitive geometry, never its children.
+            Renderer renderer = obj.GetComponent<Renderer>();
+            if (renderer != null && renderer.enabled)
+            {
+                Undo.RecordObject(renderer, "Hide AfriLife legacy renderer");
+                renderer.enabled = false;
+            }
+            Collider collider = obj.GetComponent<Collider>();
+            if (collider != null && collider.enabled)
+            {
+                Undo.RecordObject(collider, "Replace AfriLife legacy collider");
+                collider.enabled = false;
+            }
         }
     }
 }
