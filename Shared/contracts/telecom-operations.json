@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "systems": [
+    "coverage",
+    "tower-power",
+    "fiber-backhaul",
+    "congestion",
+    "outages",
+    "maintenance",
+    "roaming",
+    "billing"
+  ],
+  "outageTypes": [
+    "tower-power-loss",
+    "backhaul-fault",
+    "congestion",
+    "planned-maintenance",
+    "regional-outage"
+  ]
+}

@@ -4,6 +4,13 @@ import { resolve } from "node:path";
 import { sendJson } from "./http/json.mjs";
 import { handleWorldReference } from "./routes/world-reference.mjs";
 import { handleRuntimeContracts } from "./routes/runtime-contracts.mjs";
+import { handleOperationsContracts } from "./routes/operations-contracts.mjs";
+import {
+  roadEvents,
+  telecomOperations,
+  powerRestoration,
+  neighborhoodServiceOperations,
+} from "./operations-contracts.mjs";
 import {
   cityRuntimeProfiles,
   neighborhoodRuntime,
@@ -55,6 +62,10 @@ export function makeServer() {
         firstNeighborhoodRuntime: "client-foundation",
         publicTransitRuntime: "contract-foundation",
         utilityInterdependence: "client-foundation",
+        roadOperations: "client-foundation",
+        transitOperations: "client-foundation",
+        telecomOperations: "client-foundation",
+        powerRestoration: "client-foundation",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -82,6 +93,13 @@ export function makeServer() {
       cities: cityRuntimeProfiles,
       neighborhood: neighborhoodRuntime,
       transit: publicTransitRuntime,
+    })) return;
+
+    if (handleOperationsContracts(req, res, path, {
+      roads: roadEvents,
+      telecom: telecomOperations,
+      power: powerRestoration,
+      services: neighborhoodServiceOperations,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });

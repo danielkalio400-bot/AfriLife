@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "systems": [
+    "generation",
+    "transmission",
+    "substations",
+    "distribution",
+    "meters",
+    "load-management",
+    "load-shedding",
+    "faults",
+    "repair-crews",
+    "critical-infrastructure-priority",
+    "restoration"
+  ]
+}

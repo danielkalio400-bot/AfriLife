@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "eventTypes": [
+    "congestion",
+    "breakdown",
+    "collision",
+    "construction",
+    "flooding",
+    "closure",
+    "tow-operation",
+    "toll-queue"
+  ],
+  "effects": [
+    "travel-time",
+    "route-choice",
+    "public-transit-delay",
+    "service-access",
+    "vehicle-wear"
+  ]
+}
