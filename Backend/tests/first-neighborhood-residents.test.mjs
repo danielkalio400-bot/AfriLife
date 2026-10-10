@@ -1,36 +1,43 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
-const base=new URL("../../GameClient/StarterAssets/Assets/_AfriLife/",import.meta.url);
-const read=path=>readFileSync(new URL(path,base),"utf8");
-const contract=JSON.parse(readFileSync(new URL("../../Shared/contracts/first-neighborhood-residents.json",import.meta.url),"utf8"));
-test("resident binds to existing persisted NPC schema and known resident id",()=>{
-const director=read("Gameplay/FirstNeighborhood/FirstNeighborhoodResidentDirector.cs");
-assert.match(director,/PersistentNpcs\.Find/);
-assert.match(director,/PersistentNpcs\.Add/);
-assert.match(director,/NpcRuntimeState/);
-assert.match(director,/CanConverse\(playerPosition\)/);
-assert.match(director,/LastConversationDay/);
-assert.equal(contract.resident.persistentSource,"WorldSaveData.PersistentNpcs / NpcRuntimeState");
+import {FirstNeighborhoodResidentsReference} from "../src/services/first-neighborhood-residents-reference.mjs";
+const root=new URL("../../GameClient/StarterAssets/Assets/_AfriLife/",import.meta.url);
+const unity=p=>readFileSync(new URL(p,root),"utf8");
+const manifest=JSON.parse(readFileSync(new URL("../../Shared/contracts/first-neighborhood-residents.json",import.meta.url),"utf8"));
+test("NPCs have stable IDs, canonical WorldSaveData persistence and resident markers",()=>{
+ assert.equal(new Set(manifest.residents.map(x=>x.id)).size,3);
+ const svc=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodResidentService.cs");
+ assert.match(svc,/WorldSaveData/);
+ assert.match(svc,/_world.PersistentNpcs.Add\(/);
+ assert.match(svc,/NpcRuntimeState/);
+ assert.match(svc,/TryConversation/);
+ const state=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodPrototypeState.cs");
+ assert.match(state,/ConversationResidentIds/);
+ assert.match(state,/ConversationCounts/);
+ const editor=unity("Editor/FirstNeighborhoodWalkLayerBuilder.cs");
+ assert.match(editor,/AddResidents\(\)/);
+ assert.match(editor,/AddComponent<FirstNeighborhoodResidentAgent>/);
 });
-test("scripted conversation requires actual resident and is still gated by interaction point",()=>{
-const hud=read("Gameplay/FirstNeighborhood/FirstNeighborhoodPrototypeHud.cs");
-const marker=hud.indexOf("FirstNeighborhoodInteractionPolicy.CanPerform");
-const resident=hud.indexOf("_resident.CanConverse");
-const action=hud.indexOf("_loop.TryAdvance");
-assert.ok(marker>=0&&resident>marker&&action>resident);
-assert.match(hud,/_resident\?\.RecordConversation\(\)/);
-assert.match(hud,/_resident\?\.Bind\(_loop.SaveData\)/);
+test("resident conversation requires physical proximity and non-sleeping daypart",()=>{
+ const r=new FirstNeighborhoodResidentsReference();
+ const id=manifest.residents[0].id;
+ assert.equal(r.talk({residentId:id,actorNear:false,elapsedWorldSeconds:0}).error,"out_of_range");
+ assert.equal(r.talk({residentId:id,actorNear:true,elapsedWorldSeconds:17*3600}).error,"resident_asleep");
+ assert.equal(r.talk({residentId:"unknown",actorNear:true,elapsedWorldSeconds:0}).error,"unknown_resident");
+ const spoken=r.talk({residentId:id,actorNear:true,elapsedWorldSeconds:0});
+ assert.equal(spoken.record.talks,1);
+ assert.equal(spoken.record.reputation,1);
+ const restored=new FirstNeighborhoodResidentsReference();
+ assert.equal(restored.load(r.save()).ok,true);
+ assert.equal(restored.summary(id).talks,1);
 });
-test("scene creation and upgrade are idempotent and do not overwrite authored residents",()=>{
-const scene=read("Editor/FirstNeighborhoodResidentSceneBuilder.cs");
-assert.match(scene,/File.Exists\(ScenePath\)/);
-assert.match(scene,/GameObject.Find\("First Neighborhood Resident"\)/);
-assert.match(scene,/AddComponent<FirstNeighborhoodResidentAgent>/);
-assert.match(read("Editor/FirstNeighborhoodPrototypeSceneBuilder.cs"),/FirstNeighborhoodResidentSceneBuilder.AddToScene/);
-});
-test("no fictional resident milestone clears full Nigeria release gate",()=>{
-assert.ok(contract.qaLimitations.includes("no Nigeria expansion approval"));
-const src=read("Gameplay/FirstNeighborhood/FirstNeighborhoodResidentDirector.cs");
-assert.doesNotMatch(src,/gateSatisfied\s*=\s*true|releaseApproved\s*=\s*true/);
+test("HUD guards NPC interaction and loop uses social persistence before step",()=>{
+ const hud=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodPrototypeHud.cs");
+ assert.match(hud,/agent.InConversationRange/);
+ assert.match(hud,/ClosestResident\(\)/);
+ assert.match(hud,/_loop.TryAdvance\(out _message,agent.ResidentId\)/);
+ const loop=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodPrototypeLoop.cs");
+ assert.match(loop,/_residents.TryConversation\(nearbyResidentId,State,out message\)/);
+ assert.doesNotMatch(loop,/gateSatisfied\s*=\s*true/);
 });

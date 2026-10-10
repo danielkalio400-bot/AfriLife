@@ -55,6 +55,7 @@ namespace AfriLife.Editor
             AddMarker("bank","Bill Payment Bank",-7f,7.3f);
             AddMarker("park","Small Activity Park",2f,2f);
             AddMarker("neighbor","Neighbor Gathering Spot",6f,3.0f);
+            AddResidents();
 
             Camera camera=Camera.main;
             if (camera!=null)
@@ -66,6 +67,27 @@ namespace AfriLife.Editor
             }
 
             EditorSceneManager.MarkSceneDirty(scene);
+        }
+
+        private static void AddResidents()
+        {
+            SpawnResident("prototype-resident-ada","Ada",new Vector3(6f,0f,3f));
+            SpawnResident("prototype-resident-bola","Bola",new Vector3(8f,0f,-5f));
+            SpawnResident("prototype-resident-kwame","Kwame",new Vector3(3f,0f,3f));
+        }
+
+        private static void SpawnResident(string id,string name,Vector3 location)
+        {
+            if(GameObject.Find("Resident - "+name)!=null)return;
+            var npc=GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            npc.name="Resident - "+name;
+            npc.transform.position=location+Vector3.up;
+            var collider=npc.GetComponent<Collider>();
+            if(collider!=null)Object.DestroyImmediate(collider);
+            var agent=npc.AddComponent<FirstNeighborhoodResidentAgent>();
+            agent.ResidentId=id;
+            agent.DisplayName=name;
+            agent.SetDestination("neighbor",false);
         }
 
         private static void AddMarker(string id,string name,float x,float z)

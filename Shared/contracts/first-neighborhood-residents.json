@@ -1,35 +1,50 @@
 {
   "version": 1,
   "bulk": 34,
-  "scope": "scripted first-neighborhood resident",
-  "resident": {
-    "id": "first-neighborhood-resident-01",
-    "name": "Amara",
-    "fictional": true,
-    "cityId": "Lagos",
-    "initialSite": "neighbor",
-    "persistentSource": "WorldSaveData.PersistentNpcs / NpcRuntimeState"
-  },
-  "routeStages": [
-    "home",
-    "workplace",
-    "neighbor"
+  "scope": "first-neighborhood NPC micro-prototype",
+  "countryId": "Nigeria",
+  "cityId": "Lagos",
+  "residents": [
+    {
+      "id": "prototype-resident-ada",
+      "name": "Ada",
+      "startSite": "neighbor"
+    },
+    {
+      "id": "prototype-resident-bola",
+      "name": "Bola",
+      "startSite": "market"
+    },
+    {
+      "id": "prototype-resident-kwame",
+      "name": "Kwame",
+      "startSite": "park"
+    }
   ],
-  "engagement": {
-    "step": "interact-with-persistent-npcs",
-    "maxMeters": 2.5,
-    "requiresPhysicalResident": true,
-    "requiresMarker": true,
-    "oncePerDemoDay": true
+  "persistence": {
+    "npcRecord": "WorldSaveData.PersistentNpcs (existing NpcRuntimeState)",
+    "conversationMemory": "FirstNeighborhoodPrototypeState.ConversationResidentIds and ConversationCounts",
+    "worldId": "existing WorldSaveHeader.WorldId"
   },
-  "runtime": "Unity primitive resident agent with stage-driven walk to locations, not autonomous NPC AI",
-  "economy": "does not mint money or bypass WalletState",
-  "qaLimitations": [
-    "no real schedule engine",
-    "no navigation meshes",
-    "no finished character artwork",
-    "no Unity Editor certification",
-    "no Nigeria expansion approval"
-  ],
-  "source": "First serious neighborhood daily life build order"
+  "schedule": {
+    "clock": "fictional elapsedWorldSeconds",
+    "morning": "commute",
+    "midday": "work",
+    "evening": "social",
+    "night": "sleep"
+  },
+  "conversation": {
+    "requiresNamedResident": true,
+    "requiresProximity": true,
+    "oneStepPerAction": true,
+    "reputationDelta": 1,
+    "grantsIncome": false
+  },
+  "notImplemented": [
+    "NavMesh wayfinding",
+    "natural-language AI chat",
+    "large persistent NPC population",
+    "multiplayer authoritative NPCs",
+    "Unity device certification"
+  ]
 }

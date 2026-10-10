@@ -19,6 +19,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         public float PlayerX;
         public float PlayerZ;
         public string[] CompletedSteps = Array.Empty<string>();
+        public string[] ConversationResidentIds = Array.Empty<string>();
+        public int[] ConversationCounts = Array.Empty<int>();
 
         public void Normalize(int stepsCount)
         {
@@ -31,6 +33,17 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             if (CompletedSteps.Length > NextStep)
                 Array.Resize(ref CompletedSteps, NextStep);
             CurrentLocation ??= "home";
+            ConversationResidentIds ??= Array.Empty<string>();
+            ConversationCounts ??= Array.Empty<int>();
+            if (ConversationResidentIds.Length != ConversationCounts.Length)
+            {
+                // Truncate unpaired legacy/corrupt entries without changing IDs.
+                int length = Math.Min(ConversationResidentIds.Length,ConversationCounts.Length);
+                Array.Resize(ref ConversationResidentIds,length);
+                Array.Resize(ref ConversationCounts,length);
+            }
+            for(int i=0;i<ConversationCounts.Length;i++)
+                ConversationCounts[i]=Math.Max(0,ConversationCounts[i]);
             if (float.IsNaN(PlayerX) || float.IsInfinity(PlayerX) ||
                 float.IsNaN(PlayerZ) || float.IsInfinity(PlayerZ))
             {

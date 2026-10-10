@@ -34,6 +34,9 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private readonly NeedsState _needs = new();
         private readonly InteractionExecutor _interactions = DefaultInteractionRegistry.Create();
         private readonly GameClock _clock = new();
+        private readonly FirstNeighborhoodResidentService _residents;
+
+        public FirstNeighborhoodResidentService Residents => _residents;
 
         public WorldSaveData SaveData => _save;
         public FirstNeighborhoodPrototypeState State => _save.FirstNeighborhoodPrototype;
@@ -55,8 +58,10 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         {
             _save = save ?? throw new ArgumentNullException(nameof(save));
             _save.Normalize();
+            _residents = new FirstNeighborhoodResidentService(_save);
             _save.FirstNeighborhoodPrototype ??= new FirstNeighborhoodPrototypeState();
             State.Normalize(Steps.Length);
+            _residents.AdvanceSchedule(State.ElapsedWorldSeconds);
             _save.Player.CountryId = "Nigeria";
             if (string.IsNullOrWhiteSpace(_save.Player.CityId))
                 _save.Player.CityId = "Lagos";
@@ -77,7 +82,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             }
         }
 
-        public bool TryAdvance(out string message)
+        public bool TryAdvance(out string message, string nearbyResidentId = null)
         {
             if(State.NextStep >= Steps.Length)
             {
@@ -146,7 +151,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                     _needs.Adjust(NeedType.Energy,-8f);
                     break;
                 case "interact-with-persistent-npcs":
-                    // Conversation placeholder, not an NPC AI or memory write.
+                    if (!_residents.TryConversation(nearbyResidentId,State,out message))
+                        return false;
                     _needs.Adjust(NeedType.Social,5f);
                     break;
                 case "pay-bills":
@@ -182,6 +188,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             var completed = new List<string>(State.CompletedSteps) {step};
             State.CompletedSteps=completed.ToArray();
             StoreNeeds();
+            _residents.AdvanceSchedule(State.ElapsedWorldSeconds);
             message="Completed: "+step;
             return true;
         }
