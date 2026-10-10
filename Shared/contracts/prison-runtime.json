@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "phase": 29,
+  "systems": [
+    "intake",
+    "cells",
+    "meals",
+    "recreation",
+    "work",
+    "education",
+    "health-care",
+    "family-visits",
+    "lawyer-visits",
+    "rehabilitation",
+    "parole-release",
+    "time-compression",
+    "reintegration"
+  ],
+  "designRule": "Correctional gameplay is non-graphic and focuses on schedules, services, rehabilitation, release and reintegration. It does not include escape methods, violence tactics or real prison security procedures."
+}

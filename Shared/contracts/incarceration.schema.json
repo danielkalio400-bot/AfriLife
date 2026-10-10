@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://afrilife.invalid/contracts/incarceration.schema.json",
+  "title": "AfriLife Incarceration Record",
+  "type": "object",
+  "required": ["recordId", "personEntityId", "facilityId", "sentenceDays", "daysServed", "state"],
+  "properties": {
+    "recordId": { "type": "string", "minLength": 1 },
+    "personEntityId": { "type": "string", "minLength": 1 },
+    "facilityId": { "type": "string", "minLength": 1 },
+    "sentenceDays": { "type": "integer", "minimum": 0 },
+    "daysServed": { "type": "integer", "minimum": 0 },
+    "state": { "enum": ["intake", "assigned", "serving-sentence", "parole-review", "release-approved", "released"] }
+  }
+}
