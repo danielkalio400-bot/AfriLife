@@ -13,6 +13,9 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         public int DaysCompleted;
         public long ElapsedWorldSeconds;
         public bool Started;
+        public bool HasSavedPosition;
+        public float PlayerX;
+        public float PlayerZ;
         public string[] CompletedSteps = Array.Empty<string>();
 
         public void Normalize(int stepsCount)
@@ -24,6 +27,13 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             if (CompletedSteps.Length > NextStep)
                 Array.Resize(ref CompletedSteps, NextStep);
             CurrentLocation ??= "home";
+            if (float.IsNaN(PlayerX) || float.IsInfinity(PlayerX) ||
+                float.IsNaN(PlayerZ) || float.IsInfinity(PlayerZ))
+            {
+                HasSavedPosition=false;
+                PlayerX=0f;
+                PlayerZ=0f;
+            }
         }
     }
 }

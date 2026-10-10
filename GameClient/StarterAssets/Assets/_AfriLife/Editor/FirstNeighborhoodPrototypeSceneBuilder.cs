@@ -41,10 +41,11 @@ namespace AfriLife.Editor
             }
 
             System.IO.Directory.CreateDirectory("Assets/_AfriLife/Scenes");
+            FirstNeighborhoodWalkLayerBuilder.AddToScene(scene);
             EditorSceneManager.SaveScene(scene,path);
             AssetDatabase.Refresh();
             EditorUtility.DisplayDialog("Prototype created",
-                "The scene uses Unity primitives and GUI actions. No city AI or driving is implemented.","OK");
+                "Primitive buildings, a movable capsule and walk-to-interact markers were created. No city AI or driving is implemented.","OK");
         }
 
         private static void CreateBlock(string name,Vector3 position,Vector3 scale)

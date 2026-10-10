@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "bulk": 33,
+  "city": "Lagos",
+  "country": "Nigeria",
+  "scope": "first scripted blockout only",
+  "movement": {
+    "characterController": true,
+    "keyboard": "WASD or arrows",
+    "touch": "four large on-screen direction buttons",
+    "camera": "smooth elevated third-person follow",
+    "worldBoundsMeters": [
+      -16,
+      16
+    ],
+    "noVehicles": true
+  },
+  "markers": [
+    {
+      "siteId": "home",
+      "title": "Home Entrance",
+      "x": -11,
+      "z": -6.5
+    },
+    {
+      "siteId": "market",
+      "title": "Market Counter",
+      "x": 9,
+      "z": -4.8
+    },
+    {
+      "siteId": "workplace",
+      "title": "Workplace Entry",
+      "x": 10,
+      "z": 4.8
+    },
+    {
+      "siteId": "bank",
+      "title": "Bill Payment Bank",
+      "x": -7,
+      "z": 7.3
+    },
+    {
+      "siteId": "park",
+      "title": "Small Activity Park",
+      "x": 2,
+      "z": 2
+    },
+    {
+      "siteId": "neighbor",
+      "title": "Neighbor Gathering Spot",
+      "x": 6,
+      "z": 3
+    }
+  ],
+  "physicalRules": {
+    "proximityRequired": true,
+    "meters": 3,
+    "stepSequence": "existing Daily Life Loop",
+    "financialRules": "existing WalletState",
+    "saveState": "existing WorldSaveData and LocalWorldSaveStore",
+    "positionPersisted": true,
+    "autoSaveOnMoveSeconds": 6
+  },
+  "sceneEditor": {
+    "create": "AfriLife/Build First Neighborhood Prototype Scene",
+    "upgrade": "AfriLife/Add Walkable Interaction Layer",
+    "overwriteExisting": false
+  },
+  "notImplemented": [
+    "driving",
+    "finished pedestrian/NPC AI",
+    "real roads and geospatial maps",
+    "production device testing",
+    "completed first-neighborhood QA gate"
+  ]
+}

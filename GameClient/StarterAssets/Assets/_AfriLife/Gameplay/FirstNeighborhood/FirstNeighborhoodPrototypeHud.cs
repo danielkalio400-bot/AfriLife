@@ -9,7 +9,41 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private Vector2 _scroll;
         private string _message="Use the action button to follow the first day.";
         private bool _saveVerified;
-        private void Start() { _loop = new FirstNeighborhoodPrototypeLoop(LocalWorldSaveStore.LoadOrCreate()); }
+        private FirstNeighborhoodWalkController _actor;
+        private FirstNeighborhoodInteractionPoint[] _points;
+        private float _nextAutoSave;
+        private void Start()
+        {
+            _loop=new FirstNeighborhoodPrototypeLoop(LocalWorldSaveStore.LoadOrCreate());
+            _actor=FindFirstObjectByType<FirstNeighborhoodWalkController>();
+            _points=FindObjectsByType<FirstNeighborhoodInteractionPoint>(FindObjectsSortMode.None);
+            if (_actor!=null)_actor.Restore(_loop.State);
+            _nextAutoSave=Time.unscaledTime+6f;
+        }
+
+        private void Update()
+        {
+            if (_loop==null || _actor==null || Time.unscaledTime < _nextAutoSave)
+                return;
+            _nextAutoSave=Time.unscaledTime+6f;
+            if (_actor.HasMovedSinceCapture) SavePlayerPosition();
+        }
+
+        private void SavePlayerPosition()
+        {
+            _actor?.Capture(_loop.State);
+            LocalWorldSaveStore.Save(_loop.SaveData);
+        }
+
+        private void OnApplicationPause(bool paused)
+        {
+            if (paused && _loop!=null)SavePlayerPosition();
+        }
+
+        private void OnApplicationQuit()
+        {
+            if (_loop!=null)SavePlayerPosition();
+        }
 
         private void OnGUI()
         {
@@ -21,15 +55,17 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             _scroll=GUILayout.BeginScrollView(_scroll);
             GUILayout.Label("Location: "+_loop.State.CurrentLocation);
             GUILayout.Label("Current action: "+_loop.CurrentStep);
+            GUILayout.Label("Walk to: "+FirstNeighborhoodInteractionPolicy.RequiredSite(_loop.CurrentStep));
+            GUILayout.Label("Keyboard WASD/arrows or touch direction pad to move.");
             GUILayout.Label("Progress: "+_loop.State.NextStep+"/"+FirstNeighborhoodPrototypeLoop.Steps.Length);
             GUILayout.Label("Funds (NGN minor units): "+_loop.CashMinorUnits);
             GUILayout.Label("Days completed: "+_loop.CompletedDays);
-            GUILayout.Label("This is a scripted Unity prototype, not a complete open world.");
+            GUILayout.Label("Physical movement with scripted interactions; not a complete open world.");
             if(_loop.CurrentStep=="save-and-reload")
             {
                 if(GUILayout.Button("Save & reload to finish day",GUILayout.MinHeight(40)))
                 {
-                    LocalWorldSaveStore.Save(_loop.SaveData);
+                    SavePlayerPosition();
                     var reloaded=LocalWorldSaveStore.LoadOrCreate();
                     // Verify persisted identity and current step before marking success.
                     if(reloaded.Header.WorldId==_loop.SaveData.Header.WorldId &&
@@ -37,8 +73,9 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                         reloaded.FirstNeighborhoodPrototype.NextStep==16)
                     {
                         _loop=new FirstNeighborhoodPrototypeLoop(reloaded);
+                        _actor?.Restore(_loop.State);
                         _saveVerified=_loop.CompleteAfterVerifiedReload(out _message);
-                        if(_saveVerified)LocalWorldSaveStore.Save(_loop.SaveData);
+                        if(_saveVerified)SavePlayerPosition();
                     }
                     else _message="Save verification failed; progress unchanged.";
                 }
@@ -48,18 +85,24 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 if(GUILayout.Button("Begin next demo day",GUILayout.MinHeight(40)))
                 {
                     _loop.BeginNextDay();
-                    LocalWorldSaveStore.Save(_loop.SaveData);
+                    SavePlayerPosition();
                 }
             }
             else if(GUILayout.Button("Perform current action",GUILayout.MinHeight(40)))
             {
-                if(_loop.TryAdvance(out _message))
-                    LocalWorldSaveStore.Save(_loop.SaveData);
+                if(_actor!=null &&
+                    !FirstNeighborhoodInteractionPolicy.CanPerform(_loop.CurrentStep,
+                        _actor.transform.position,_points,out _message))
+                {
+                    // The character must physically reach the correct marker.
+                }
+                else if(_loop.TryAdvance(out _message)) SavePlayerPosition();
             }
             if(GUILayout.Button("Reload saved state",GUILayout.MinHeight(38)))
             {
                 _loop=new FirstNeighborhoodPrototypeLoop(LocalWorldSaveStore.LoadOrCreate());
-                _message="Reloaded saved neighborhood state.";
+                _actor?.Restore(_loop.State);
+                _message="Reloaded saved neighborhood state and player position.";
             }
             GUILayout.Label(_message);
             GUILayout.EndScrollView();
