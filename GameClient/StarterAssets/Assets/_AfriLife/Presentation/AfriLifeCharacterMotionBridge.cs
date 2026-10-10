@@ -11,6 +11,9 @@ namespace AfriLife.Presentation
         [SerializeField] private string speedParameter = "Speed";
         [SerializeField] private string movingParameter = "IsMoving";
         private Animator[] _animators;
+        private bool[] _hasSpeed;
+        private bool[] _hasMoving;
+        private int _speedHash, _movingHash;
         private Vector3 _lastPosition;
 
         public void Configure(Transform source)
@@ -23,6 +26,24 @@ namespace AfriLife.Presentation
         {
             _animators = GetComponentsInChildren<Animator>(true);
             _lastPosition = motionSource != null ? motionSource.position : transform.position;
+            _speedHash = Animator.StringToHash(speedParameter);
+            _movingHash = Animator.StringToHash(movingParameter);
+            _hasSpeed = new bool[_animators.Length];
+            _hasMoving = new bool[_animators.Length];
+            for (int i = 0; i < _animators.Length; i++)
+            {
+                Animator animator = _animators[i];
+                if (animator == null) continue;
+                foreach (AnimatorControllerParameter parameter in animator.parameters)
+                {
+                    if (parameter.nameHash == _speedHash &&
+                        parameter.type == AnimatorControllerParameterType.Float)
+                        _hasSpeed[i] = true;
+                    if (parameter.nameHash == _movingHash &&
+                        parameter.type == AnimatorControllerParameterType.Bool)
+                        _hasMoving[i] = true;
+                }
+            }
         }
 
         private void Update()
@@ -36,18 +57,12 @@ namespace AfriLife.Presentation
 
             float speed = Mathf.Clamp01(delta.magnitude / Time.deltaTime / fullWalkingSpeed);
             if (_animators == null) return;
-            foreach (Animator animator in _animators)
+            for (int i = 0; i < _animators.Length; i++)
             {
+                Animator animator = _animators[i];
                 if (animator == null || animator.runtimeAnimatorController == null) continue;
-                foreach (AnimatorControllerParameter parameter in animator.parameters)
-                {
-                    if (parameter.name == speedParameter &&
-                        parameter.type == AnimatorControllerParameterType.Float)
-                        animator.SetFloat(parameter.nameHash, speed);
-                    else if (parameter.name == movingParameter &&
-                        parameter.type == AnimatorControllerParameterType.Bool)
-                        animator.SetBool(parameter.nameHash, speed > 0.025f);
-                }
+                if (_hasSpeed[i]) animator.SetFloat(_speedHash, speed);
+                if (_hasMoving[i]) animator.SetBool(_movingHash, speed > 0.025f);
             }
         }
     }

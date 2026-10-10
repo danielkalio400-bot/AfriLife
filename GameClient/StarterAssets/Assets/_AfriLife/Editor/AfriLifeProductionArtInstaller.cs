@@ -50,7 +50,7 @@ namespace AfriLife.Editor
 
             foreach (string name in new[] { "Ground - Prototype Square", "Home",
                 "Grocery Market", "Workplace", "Bank", "Clinic" })
-                HideLegacyObject(Find(scene, name));
+                HideLegacyObject(FindSceneRoot(scene, name));
 
             GameObject visual = EnsurePrefab(profile.PlayerPrefab, scene,
                 player.transform, "AfriLife Production Player", Vector3.zero);
@@ -151,6 +151,13 @@ namespace AfriLife.Editor
                 throw new InvalidOperationException(label + " prefab must contain visible meshes.");
             if (needsCollider && prefab.GetComponentsInChildren<Collider>(true).Length == 0)
                 throw new InvalidOperationException(label + " requires physical colliders.");
+        }
+
+        private static GameObject FindSceneRoot(Scene scene, string name)
+        {
+            foreach (GameObject root in scene.GetRootGameObjects())
+                if (root.name == name) return root;
+            return null;
         }
 
         private static GameObject Find(Scene scene, string name)
