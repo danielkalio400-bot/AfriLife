@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "status": "first-neighborhood-template",
+  "requiredServices": [
+    "Shop",
+    "Restaurant",
+    "Gym",
+    "Bank",
+    "Clinic",
+    "PoliceStation",
+    "FuelStation",
+    "Workplace",
+    "TransportStop"
+  ],
+  "systems": [
+    "housing",
+    "pedestrians",
+    "traffic",
+    "day-night",
+    "utilities",
+    "jobs",
+    "shopping",
+    "phone-data",
+    "save-load",
+    "persistent-npcs"
+  ]
+}

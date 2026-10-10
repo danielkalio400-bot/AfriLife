@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "status": "prototype-catalog",
+  "banks": [
+    {
+      "bankId": "ng-community-bank",
+      "country": "Nigeria",
+      "currencies": ["NGN", "USD"],
+      "accountTypes": ["Current", "Savings", "Business"]
+    },
+    {
+      "bankId": "gh-community-bank",
+      "country": "Ghana",
+      "currencies": ["GHS", "USD"],
+      "accountTypes": ["Current", "Savings", "Business"]
+    }
+  ]
+}

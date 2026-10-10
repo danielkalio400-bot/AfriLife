@@ -24,27 +24,24 @@ test("status declares all committed platforms", async () => {
   });
 });
 
-test("core catalogs are exposed", async () => {
+test("core and neighborhood catalogs are exposed", async () => {
   await withServer(async base => {
     const cities = await (await fetch(`${base}/v1/cities`)).json();
     assert.ok(cities.countries.Nigeria.includes("Lagos"));
     assert.ok(cities.countries.Ghana.includes("Accra"));
 
-    const systems = await (await fetch(`${base}/v1/systems`)).json();
-    assert.ok(systems.systems.includes("world-streaming"));
-    assert.ok(systems.systems.includes("persistence"));
+    const banks = await (await fetch(`${base}/v1/banks`)).json();
+    assert.equal(banks.banks.length, 2);
 
-    const milestone = await (await fetch(`${base}/v1/milestones/daily-life`)).json();
-    assert.ok(milestone.steps.includes("save-and-reload"));
+    const education = await (await fetch(`${base}/v1/education`)).json();
+    assert.ok(education.programs.some(program => program.qualificationType === "Degree"));
 
-    const jobs = await (await fetch(`${base}/v1/jobs`)).json();
-    assert.ok(jobs.jobs.length >= 2);
+    const neighborhood = await (await fetch(`${base}/v1/neighborhood-template`)).json();
+    assert.ok(neighborhood.requiredServices.includes("Clinic"));
+    assert.ok(neighborhood.systems.includes("persistent-npcs"));
 
-    const shop = await (await fetch(`${base}/v1/shop`)).json();
-    assert.ok(shop.products.some(product => product.inventoryItemId === "meal-basic"));
-
-    const bills = await (await fetch(`${base}/v1/bill-types`)).json();
-    assert.ok(bills.types.includes("electricity"));
+    const vehicles = await (await fetch(`${base}/v1/vehicles`)).json();
+    assert.ok(vehicles.vehicleClasses.some(vehicle => vehicle.type === "Car"));
   });
 });
 

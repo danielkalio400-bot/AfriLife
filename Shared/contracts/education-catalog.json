@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "status": "prototype-catalog",
+  "programs": [
+    {
+      "programId": "secondary-general",
+      "qualificationType": "Secondary",
+      "durationGameMonths": 36
+    },
+    {
+      "programId": "vocational-technical",
+      "qualificationType": "Vocational",
+      "durationGameMonths": 18
+    },
+    {
+      "programId": "university-general",
+      "qualificationType": "Degree",
+      "durationGameMonths": 48
+    }
+  ]
+}

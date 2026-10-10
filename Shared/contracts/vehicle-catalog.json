@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "status": "prototype-catalog",
+  "vehicleClasses": [
+    { "id": "compact-car", "type": "Car", "fuelCapacityLiters": 45 },
+    { "id": "family-suv", "type": "Suv", "fuelCapacityLiters": 65 },
+    { "id": "city-bus", "type": "Bus", "fuelCapacityLiters": 180 },
+    { "id": "light-truck", "type": "Truck", "fuelCapacityLiters": 120 }
+  ]
+}

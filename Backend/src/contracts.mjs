@@ -11,3 +11,7 @@ export const dailyLifeLoop = load("../../Shared/contracts/daily-life-loop.json")
 export const jobsCatalog = load("../../Shared/contracts/jobs-catalog.json");
 export const shopCatalog = load("../../Shared/contracts/shop-catalog.json");
 export const billTypes = load("../../Shared/contracts/bill-types.json");
+export const bankCatalog = load("../../Shared/contracts/bank-catalog.json");
+export const educationCatalog = load("../../Shared/contracts/education-catalog.json");
+export const neighborhoodTemplate = load("../../Shared/contracts/neighborhood-template.json");
+export const vehicleCatalog = load("../../Shared/contracts/vehicle-catalog.json");
