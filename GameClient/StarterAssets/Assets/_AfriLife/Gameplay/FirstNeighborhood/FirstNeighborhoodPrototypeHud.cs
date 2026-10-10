@@ -11,6 +11,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private bool _saveVerified;
         private FirstNeighborhoodWalkController _actor;
         private FirstNeighborhoodInteractionPoint[] _points;
+        private FirstNeighborhoodResidentDirector _resident;
         private float _nextAutoSave;
         private void Start()
         {
@@ -18,6 +19,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             _actor=FindFirstObjectByType<FirstNeighborhoodWalkController>();
             _points=FindObjectsByType<FirstNeighborhoodInteractionPoint>(FindObjectsSortMode.None);
             if (_actor!=null)_actor.Restore(_loop.State);
+            _resident=FindFirstObjectByType<FirstNeighborhoodResidentDirector>();
+            _resident?.Bind(_loop.SaveData);
             _nextAutoSave=Time.unscaledTime+6f;
         }
 
@@ -32,6 +35,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private void SavePlayerPosition()
         {
             _actor?.Capture(_loop.State);
+            _resident?.ApplyStep(_loop.State.NextStep);
             LocalWorldSaveStore.Save(_loop.SaveData);
         }
 
@@ -60,6 +64,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             GUILayout.Label("Progress: "+_loop.State.NextStep+"/"+FirstNeighborhoodPrototypeLoop.Steps.Length);
             GUILayout.Label("Funds (NGN minor units): "+_loop.CashMinorUnits);
             GUILayout.Label("Days completed: "+_loop.CompletedDays);
+            GUILayout.Label("Resident conversations: "+_loop.State.ConversationCount);
             GUILayout.Label("Physical movement with scripted interactions; not a complete open world.");
             if(_loop.CurrentStep=="save-and-reload")
             {
@@ -74,6 +79,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                     {
                         _loop=new FirstNeighborhoodPrototypeLoop(reloaded);
                         _actor?.Restore(_loop.State);
+                        _resident?.Bind(_loop.SaveData);
                         _saveVerified=_loop.CompleteAfterVerifiedReload(out _message);
                         if(_saveVerified)SavePlayerPosition();
                     }
@@ -96,12 +102,23 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 {
                     // The character must physically reach the correct marker.
                 }
-                else if(_loop.TryAdvance(out _message)) SavePlayerPosition();
+                else if(_loop.CurrentStep=="interact-with-persistent-npcs" &&
+                    (_actor==null || _resident==null ||
+                     !_resident.CanConverse(_actor.transform.position,out _message)))
+                {
+                    // The resident must be physically present and reachable.
+                }
+                else if(_loop.TryAdvance(out _message))
+                {
+                    if(_loop.State.NextStep==12)_resident?.RecordConversation();
+                    SavePlayerPosition();
+                }
             }
             if(GUILayout.Button("Reload saved state",GUILayout.MinHeight(38)))
             {
                 _loop=new FirstNeighborhoodPrototypeLoop(LocalWorldSaveStore.LoadOrCreate());
                 _actor?.Restore(_loop.State);
+                _resident?.Bind(_loop.SaveData);
                 _message="Reloaded saved neighborhood state and player position.";
             }
             GUILayout.Label(_message);

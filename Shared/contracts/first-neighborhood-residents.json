@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "bulk": 34,
+  "scope": "scripted first-neighborhood resident",
+  "resident": {
+    "id": "first-neighborhood-resident-01",
+    "name": "Amara",
+    "fictional": true,
+    "cityId": "Lagos",
+    "initialSite": "neighbor",
+    "persistentSource": "WorldSaveData.PersistentNpcs / NpcRuntimeState"
+  },
+  "routeStages": [
+    "home",
+    "workplace",
+    "neighbor"
+  ],
+  "engagement": {
+    "step": "interact-with-persistent-npcs",
+    "maxMeters": 2.5,
+    "requiresPhysicalResident": true,
+    "requiresMarker": true,
+    "oncePerDemoDay": true
+  },
+  "runtime": "Unity primitive resident agent with stage-driven walk to locations, not autonomous NPC AI",
+  "economy": "does not mint money or bypass WalletState",
+  "qaLimitations": [
+    "no real schedule engine",
+    "no navigation meshes",
+    "no finished character artwork",
+    "no Unity Editor certification",
+    "no Nigeria expansion approval"
+  ],
+  "source": "First serious neighborhood daily life build order"
+}

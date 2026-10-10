@@ -11,6 +11,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         public string CurrentLocation = "home";
         public int NextStep;
         public int DaysCompleted;
+        public int ConversationCount;
+        public int LastConversationDay = -1;
         public long ElapsedWorldSeconds;
         public bool Started;
         public bool HasSavedPosition;
@@ -22,6 +24,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         {
             NextStep = Math.Max(0, Math.Min(stepsCount, NextStep));
             DaysCompleted = Math.Max(0, DaysCompleted);
+            ConversationCount = Math.Max(0, ConversationCount);
+            LastConversationDay = Math.Max(-1, LastConversationDay);
             ElapsedWorldSeconds = Math.Max(0, ElapsedWorldSeconds);
             CompletedSteps ??= Array.Empty<string>();
             if (CompletedSteps.Length > NextStep)
