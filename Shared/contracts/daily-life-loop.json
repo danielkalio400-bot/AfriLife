@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "milestone": "first-serious-playable-loop",
+  "steps": [
+    "wake",
+    "shower",
+    "dress",
+    "eat",
+    "use-phone",
+    "buy-mobile-data",
+    "travel-or-drive",
+    "work",
+    "earn-money",
+    "shop",
+    "exercise",
+    "interact-with-persistent-npcs",
+    "pay-bills",
+    "return-home",
+    "sit-or-lie-down",
+    "sleep",
+    "save-and-reload"
+  ]
+}

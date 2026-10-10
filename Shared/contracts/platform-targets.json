@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "engine": "Unity 6",
+  "renderPipeline": "URP",
+  "targets": [
+    {
+      "id": "android",
+      "family": "mobile",
+      "priority": "primary",
+      "input": ["touch", "controller-optional"]
+    },
+    {
+      "id": "ios",
+      "family": "mobile",
+      "priority": "primary",
+      "input": ["touch", "controller-optional"]
+    },
+    {
+      "id": "windows",
+      "family": "desktop",
+      "priority": "committed",
+      "input": ["keyboard-mouse", "controller"]
+    }
+  ],
+  "scalability": {
+    "mobile": ["dynamic-quality", "streaming", "lod", "thermal-aware-profiling"],
+    "windows": ["higher-density", "longer-draw-distance", "higher-texture-tiers"]
+  }
+}
