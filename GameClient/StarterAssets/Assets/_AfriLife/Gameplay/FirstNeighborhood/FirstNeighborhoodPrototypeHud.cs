@@ -16,6 +16,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         };
         private FirstNeighborhoodWalkController _actor;
         private FirstNeighborhoodInteractionPoint[] _points;
+        private FirstNeighborhoodActivityProp[] _activityProps;
         private FirstNeighborhoodResidentAgent[] _residents;
         private float _nextScheduleRefresh;
         private float _nextAutoSave;
@@ -24,6 +25,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             if(!TryLoadWorld(out _loop)) return;
             _actor=FindFirstObjectByType<FirstNeighborhoodWalkController>();
             _points=FindObjectsByType<FirstNeighborhoodInteractionPoint>(FindObjectsSortMode.None);
+            _activityProps=FindObjectsByType<FirstNeighborhoodActivityProp>(FindObjectsSortMode.None);
             _residents=FindObjectsByType<FirstNeighborhoodResidentAgent>(FindObjectsSortMode.None);
             _nextScheduleRefresh=Time.unscaledTime;
             if (_actor!=null)_actor.Restore(_loop.State);
@@ -208,9 +210,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             }
             else if(GUILayout.Button("Perform current action",GUILayout.MinHeight(40)))
             {
-                if(_actor!=null &&
-                    !FirstNeighborhoodInteractionPolicy.CanPerform(_loop.CurrentStep,
-                        _actor.transform.position,_points,out _message))
+                if(!FirstNeighborhoodPhysicalActionGate.CanPerform(_loop.CurrentStep,
+                    _actor,_points,_activityProps,out _message))
                 {
                     // The character must physically reach the correct marker.
                 }

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "bulk": 39,
+  "scope": "walkable Lagos neighborhood local world prop interactions",
+  "steps": 17,
+  "authoredProps": 11,
+  "activation": [
+    "walkable CharacterController exists",
+    "required site marker is in range",
+    "step-specific primitive activity prop is in range"
+  ],
+  "content": "original primitive visual props with disabled colliders; no purchased assets",
+  "economy": "existing single wallet and errand receipts unchanged",
+  "editor": "repeat-safe scene updater and missing-prop validator",
+  "limitations": [
+    "not a true indoor environment",
+    "no animation, physics grabbing or hand interaction",
+    "Play Mode and device builds not yet executed",
+    "not Ghana or nationwide playable world"
+  ]
+}

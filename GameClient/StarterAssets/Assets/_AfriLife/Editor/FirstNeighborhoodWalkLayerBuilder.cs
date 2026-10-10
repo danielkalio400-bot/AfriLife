@@ -66,6 +66,7 @@ namespace AfriLife.Editor
             AddMarker("neighbor","Neighbor Gathering Spot",6f,3.0f);
             AddClinicMarker();
             AddResidents();
+            AddActivityProps();
 
             Camera camera=Camera.main;
             if (camera!=null)
@@ -114,6 +115,51 @@ namespace AfriLife.Editor
             agent.ResidentId=id;
             agent.DisplayName=name;
             agent.SetDestination("neighbor",false);
+        }
+
+        /// <summary>Non-destructive original blockout activity props.</summary>
+        public static void AddActivityProps()
+        {
+            AddProp("home-bed","Bed and Rest","home",-11.7f,-5.6f,
+                "wake","sit-or-lie-down","sleep","save-and-reload");
+            AddProp("home-sink","Shower Basin","home",-12.2f,-6.2f,"shower");
+            AddProp("home-wardrobe","Wardrobe","home",-10.1f,-6.1f,"dress");
+            AddProp("home-table","Breakfast Table","home",-11f,-6.2f,"eat");
+            AddProp("home-phone","Phone and Data","home",-10.3f,-5.5f,
+                "use-phone","buy-mobile-data");
+            AddProp("home-door","Home Entry","home",-11f,-6.9f,"return-home");
+            AddProp("work-desk","Work Desk","workplace",10f,4.8f,
+                "travel-or-drive","work","earn-money");
+            AddProp("market-counter","Grocery Counter","market",9f,-4.8f,"shop");
+            AddProp("park-area","Park Activity","park",2f,2f,"exercise");
+            AddProp("neighbor-circle","Neighbor Meeting","neighbor",6f,3f,
+                "interact-with-persistent-npcs");
+            AddProp("bank-window","Bill Window","bank",-7f,7.3f,"pay-bills");
+        }
+
+        private static void AddProp(string id,string label,string site,
+            float x,float z,params string[] steps)
+        {
+            string name="Activity - "+label;
+            GameObject obj=GameObject.Find(name);
+            if(obj==null)
+            {
+                obj=GameObject.CreatePrimitive(PrimitiveType.Cube);
+                obj.name=name;
+                obj.transform.position=new Vector3(x,0.45f,z);
+                obj.transform.localScale=new Vector3(0.48f,0.65f,0.48f);
+                var collider=obj.GetComponent<Collider>();
+                // Props indicate a place to interact, not a solid obstruction
+                // trapping the player in the blockout exterior.
+                if(collider!=null)Object.DestroyImmediate(collider);
+            }
+            var prop=obj.GetComponent<FirstNeighborhoodActivityProp>();
+            if(prop==null)prop=obj.AddComponent<FirstNeighborhoodActivityProp>();
+            prop.PropId=id;
+            prop.DisplayName=label;
+            prop.SiteId=site;
+            prop.StepIds=steps;
+            prop.ReachMeters=3f;
         }
 
         private static void AddMarker(string id,string name,float x,float z)

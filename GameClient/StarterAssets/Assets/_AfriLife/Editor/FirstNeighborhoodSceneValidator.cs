@@ -75,6 +75,16 @@ namespace AfriLife.Editor
                 else if(count!=1)
                     problems.Add("Expected one interaction marker at "+id);
             }
+            var props=Object.FindObjectsByType<FirstNeighborhoodActivityProp>(
+                FindObjectsSortMode.None);
+            foreach(string step in FirstNeighborhoodPrototypeLoop.Steps)
+            {
+                string site=FirstNeighborhoodInteractionPolicy.RequiredSite(step);
+                int count=0;
+                foreach(var prop in props)
+                    if(prop!=null && prop.SiteId==site && prop.Supports(step))count++;
+                if(count!=1)problems.Add("Expected one activity prop for "+step);
+            }
             var residents=Object.FindObjectsByType<FirstNeighborhoodResidentAgent>(
                 FindObjectsSortMode.None);
             foreach(string id in ResidentIds)
