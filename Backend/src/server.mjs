@@ -31,6 +31,9 @@ import { courtJusticeRuntime } from "./court-contracts.mjs";
 import { handleCorrections } from "./routes/corrections.mjs";
 import { CorrectionsService } from "./services/corrections.mjs";
 import { prisonRuntime } from "./prison-contracts.mjs";
+import { handleImmigration } from "./routes/immigration.mjs";
+import { ImmigrationService } from "./services/immigration.mjs";
+import { immigrationRuntime } from "./immigration-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -90,6 +93,7 @@ export function makeServer() {
   const justiceInvestigations = new JusticeInvestigationService();
   const courts = new CourtService();
   const corrections = new CorrectionsService();
+  const immigration = new ImmigrationService();
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -139,6 +143,7 @@ export function makeServer() {
         policeCidFinancialCrime: "local-lawful-process-prototype",
         courtJustice: "local-fictional-justice-prototype",
         prisonSystem: "local-non-graphic-corrections-prototype",
+        immigrationPassportVisa: "local-fictional-administration-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -235,6 +240,11 @@ export function makeServer() {
     if (await handleCorrections(req, res, path, {
       corrections,
       contract: prisonRuntime,
+    })) return;
+
+    if (await handleImmigration(req, res, path, {
+      immigration,
+      contract: immigrationRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });

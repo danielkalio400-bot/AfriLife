@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "phase": 30,
+  "systems": [
+    "citizenship",
+    "passports",
+    "visa-applications",
+    "immigration-offices",
+    "embassies-consulates",
+    "application-forms",
+    "supporting-documents",
+    "biometrics-high-level",
+    "interviews",
+    "processing-queues",
+    "approval-refusal",
+    "residence-permits",
+    "work-permits",
+    "student-permits",
+    "entry-exit-records",
+    "border-officers"
+  ],
+  "designRule": "Immigration is a fictional game simulation. It does not provide real visa eligibility, legal advice, document forgery guidance, border-evasion methods, or real government processing rules."
+}

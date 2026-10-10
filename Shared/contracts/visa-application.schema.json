@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://afrilife.invalid/contracts/visa-application.schema.json",
+  "title": "AfriLife Visa Application",
+  "type": "object",
+  "required": ["applicationId", "personEntityId", "destinationCountryId", "visaCategory", "state"],
+  "properties": {
+    "applicationId": { "type": "string", "minLength": 1 },
+    "personEntityId": { "type": "string", "minLength": 1 },
+    "destinationCountryId": { "enum": ["Nigeria", "Ghana"] },
+    "visaCategory": { "type": "string", "minLength": 1 },
+    "state": {
+      "enum": ["draft", "submitted", "processing", "interview-scheduled", "approved", "refused", "withdrawn"]
+    }
+  }
+}
