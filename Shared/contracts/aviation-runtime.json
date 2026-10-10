@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "phase": 31,
+  "systems": [
+    "airports",
+    "check-in",
+    "baggage",
+    "security-high-level",
+    "immigration-link",
+    "boarding",
+    "aircraft-interiors",
+    "commercial-flights",
+    "private-jets",
+    "helicopters",
+    "pilots",
+    "cabin-crew",
+    "ground-staff",
+    "fuel",
+    "maintenance",
+    "hangars",
+    "air-cargo",
+    "delays-cancellations"
+  ],
+  "designRule": "Airport security and aircraft operations are represented only as high-level game state. The simulation does not provide security-bypass methods, dangerous aviation procedures, or real operational checklists."
+}
