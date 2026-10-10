@@ -19,6 +19,9 @@ import { healthcareRuntime } from "./health-contracts.mjs";
 import { handleEmergency } from "./routes/emergency.mjs";
 import { EmergencyDispatchService } from "./services/emergency-dispatch.mjs";
 import { emergencyServicesRuntime } from "./emergency-contracts.mjs";
+import { handlePropertyIncidents } from "./routes/property-incidents.mjs";
+import { PropertyIncidentService } from "./services/property-incident.mjs";
+import { propertyTheftRecoveryRuntime } from "./property-crime-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -74,6 +77,7 @@ export function makeServer() {
   const construction = new ConstructionService();
   const healthcare = new HealthcareService();
   const emergency = new EmergencyDispatchService();
+  const propertyIncidents = new PropertyIncidentService();
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -119,6 +123,7 @@ export function makeServer() {
         construction: "local-in-memory-prototype",
         healthcare: "local-high-level-prototype",
         emergencyServices: "local-dispatch-prototype",
+        propertyTheftRecovery: "local-reporting-recovery-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -195,6 +200,11 @@ export function makeServer() {
     if (await handleEmergency(req, res, path, {
       emergency,
       contract: emergencyServicesRuntime,
+    })) return;
+
+    if (await handlePropertyIncidents(req, res, path, {
+      incidents: propertyIncidents,
+      contract: propertyTheftRecoveryRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "phase": 26,
+  "systems": [
+    "phone-theft",
+    "wallet-theft",
+    "vehicle-theft",
+    "package-theft",
+    "shop-theft",
+    "home-burglary",
+    "property-theft",
+    "cctv",
+    "witnesses",
+    "police-reports",
+    "stolen-item-records",
+    "recovery",
+    "insurance-claims",
+    "investigation"
+  ],
+  "designRule": "The system models reporting, evidence records, recovery and consequences. It does not describe how to commit, conceal or evade property crime."
+}
