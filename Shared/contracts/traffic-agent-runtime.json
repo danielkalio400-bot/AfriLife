@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "agentKinds": [
+    "private-car",
+    "taxi",
+    "ride-hailing",
+    "minibus",
+    "bus",
+    "coach",
+    "truck",
+    "motorcycle",
+    "emergency",
+    "service-vehicle"
+  ],
+  "decisionInputs": [
+    "road-condition",
+    "signal-state",
+    "congestion",
+    "destination",
+    "parking",
+    "service-state"
+  ]
+}

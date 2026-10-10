@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "businessTypes": [
+    "retail",
+    "restaurant",
+    "gym",
+    "bank-branch",
+    "clinic",
+    "fuel-station",
+    "workshop",
+    "telecom-shop",
+    "transport-operator",
+    "logistics",
+    "office"
+  ],
+  "operationalInputs": [
+    "staff",
+    "utilities",
+    "customer-capacity",
+    "open-state",
+    "cash-balance"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "utilities": ["electricity", "water", "telecom"],
+  "billingInputs": [
+    "meter-reading",
+    "fixed-charge",
+    "unit-rate",
+    "included-units",
+    "due-date",
+    "payment-state"
+  ],
+  "rule": "Rates are game-balance data and must not be treated as live real-world tariffs."
+}

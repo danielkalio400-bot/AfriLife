@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "systems": [
+    "driver-shifts",
+    "vehicle-capacity",
+    "passenger-waiting",
+    "boarding",
+    "alighting",
+    "route-delay",
+    "service-disruption"
+  ]
+}

@@ -5,6 +5,13 @@ import { sendJson } from "./http/json.mjs";
 import { handleWorldReference } from "./routes/world-reference.mjs";
 import { handleRuntimeContracts } from "./routes/runtime-contracts.mjs";
 import { handleOperationsContracts } from "./routes/operations-contracts.mjs";
+import { handleSimulationContracts } from "./routes/simulation-contracts.mjs";
+import {
+  trafficAgents,
+  utilityBilling,
+  transitPassengers,
+  businessRuntime,
+} from "./simulation-contracts.mjs";
 import {
   roadEvents,
   telecomOperations,
@@ -66,6 +73,11 @@ export function makeServer() {
         transitOperations: "client-foundation",
         telecomOperations: "client-foundation",
         powerRestoration: "client-foundation",
+        trafficAgents: "client-foundation",
+        utilityBilling: "client-foundation",
+        transitPassengers: "client-foundation",
+        neighborhoodBusinesses: "client-foundation",
+        persistentWorldEvents: "client-foundation",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -100,6 +112,13 @@ export function makeServer() {
       telecom: telecomOperations,
       power: powerRestoration,
       services: neighborhoodServiceOperations,
+    })) return;
+
+    if (handleSimulationContracts(req, res, path, {
+      traffic: trafficAgents,
+      utilities: utilityBilling,
+      transit: transitPassengers,
+      businesses: businessRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });
