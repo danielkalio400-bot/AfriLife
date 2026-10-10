@@ -61,6 +61,9 @@ import { weatherEnvironmentRuntime } from "./weather-environment-contracts.mjs";
 import { handleNewsMedia } from "./routes/news-media.mjs";
 import { NewsMediaService } from "./services/news-media.mjs";
 import { newsMediaRuntime } from "./news-media-contracts.mjs";
+import { EnvironmentalResponseService } from "./services/environmental-response.mjs";
+import { handleEnvironmentalResponse } from "./routes/environmental-response.mjs";
+import { environmentalResponseRuntime } from "./environmental-response-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -130,6 +133,7 @@ export function makeServer() {
   const nationalRevenueDividend = new NationalRevenueDividendService();
   const weatherEnvironment = new WeatherEnvironmentService();
   const newsMedia = new NewsMediaService();
+  const environmentalResponse = new EnvironmentalResponseService({ weather: weatherEnvironment, media: newsMedia });
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -189,6 +193,7 @@ export function makeServer() {
         nationalRevenueDividend: "local-fictional-public-finance-prototype",
         weatherEnvironment: "local-normalized-environment-effects-prototype",
         newsMedia: "local-fictional-world-news-prototype",
+        environmentalResponse: "local-fictional-recovery-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -335,6 +340,11 @@ export function makeServer() {
     if (await handleNewsMedia(req, res, path, {
       media: newsMedia,
       contract: newsMediaRuntime,
+    })) return;
+
+    if (await handleEnvironmentalResponse(req, res, path, {
+      responseService: environmentalResponse,
+      contract: environmentalResponseRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });

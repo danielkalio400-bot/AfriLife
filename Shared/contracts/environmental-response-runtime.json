@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "phase": 38,
+  "bulk": 27,
+  "fictional": true,
+  "countries": [
+    "Nigeria",
+    "Ghana"
+  ],
+  "domains": [
+    "road",
+    "grid",
+    "aviation",
+    "maritime",
+    "agriculture"
+  ],
+  "states": [
+    "disrupted",
+    "recovering",
+    "restored"
+  ],
+  "schema": {
+    "requestId": "client-supplied idempotency key scoped to country",
+    "workOrderId": "idempotency key scoped to incident",
+    "weatherStateId": "source version",
+    "severity01": "0..1",
+    "recovery01": "0..1"
+  },
+  "routes": [
+    "GET /v1/runtime/environmental-response",
+    "GET /v1/environment/assess",
+    "GET /v1/environment/disruptions",
+    "POST /v1/dev/environment/disruptions",
+    "POST /v1/dev/environment/recovery"
+  ],
+  "safety": "Fictional deterministic gameplay effects only. Never real-world weather forecasts, official alerts, route safety advice, or engineering guidance.",
+  "persistence": "In-memory development implementation. Migration defines prospective durable schema only; no database adapter is connected."
+}
