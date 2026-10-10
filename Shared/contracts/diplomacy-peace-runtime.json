@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "bulk": 30,
+  "phase": 42,
+  "countries": [
+    "Nigeria",
+    "Ghana"
+  ],
+  "fictional": true,
+  "nonPartisan": true,
+  "states": [
+    "normal",
+    "dispute",
+    "restrictions",
+    "talks",
+    "ceasefire",
+    "agreement",
+    "reopening",
+    "restored"
+  ],
+  "bilateralRequirement": "Both fictional country representatives approve each phase in the developer simulator",
+  "scope": [
+    "trade",
+    "border",
+    "maritime",
+    "travel"
+  ],
+  "neutralMedia": [
+    "government-announcement",
+    "peace-talks"
+  ],
+  "reconstructionAuthority": "GovernmentService approved budget + agency and spending ledger, followed by public project creation",
+  "civilianEffects": "High-level route-access and relief indices; no change to real services or movements",
+  "constraints": [
+    "no territorial claims",
+    "no operational conflict actions",
+    "no actual political or economic data",
+    "no simulated physical violence",
+    "no real-world sanctions guidance",
+    "no client-supplied authority in production"
+  ],
+  "limits": [
+    "development-only HTTP endpoints have no real authentication",
+    "in-memory relation and proposal state",
+    "SQL schema not connected",
+    "no real trade/visa/transport connector",
+    "cross-service service disruption is a read-only projection"
+  ],
+  "masterSpecification": "Unified Master pp. 31-32 and Phase 42 p.58"
+}

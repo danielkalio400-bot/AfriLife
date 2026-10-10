@@ -70,6 +70,9 @@ import { folkloreRuntime } from "./folklore-contracts.mjs";
 import { DefenseCivilReadinessService } from "./services/defense-civil-readiness.mjs";
 import { handleDefenseCivilReadiness } from "./routes/defense-civil-readiness.mjs";
 import { defenseCivilReadinessRuntime } from "./defense-contracts.mjs";
+import { DiplomacyPeaceService } from "./services/diplomacy-peace.mjs";
+import { handleDiplomacyPeace } from "./routes/diplomacy-peace.mjs";
+import { diplomacyPeaceContract } from "./diplomacy-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -142,6 +145,7 @@ export function makeServer() {
   const environmentalResponse = new EnvironmentalResponseService({ weather: weatherEnvironment, media: newsMedia });
   const folkloreStories = new FolkloreStoriesService();
   const defenseCivilReadiness = new DefenseCivilReadinessService({ government });
+  const diplomacyPeace = new DiplomacyPeaceService({ government, media: newsMedia });
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -204,6 +208,7 @@ export function makeServer() {
         environmentalResponse: "local-fictional-recovery-prototype",
         folkloreStories: "local-opt-in-fictional-folklore-prototype",
         defenseCivilReadiness: "local-fictional-macro-and-civilian-impact-prototype",
+        diplomacyPeace: "local-fictional-bilateral-peace-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -365,6 +370,11 @@ export function makeServer() {
     if (await handleDefenseCivilReadiness(req, res, path, {
       defense: defenseCivilReadiness,
       contract: defenseCivilReadinessRuntime,
+    })) return;
+
+    if (await handleDiplomacyPeace(req, res, path, {
+      diplomacy: diplomacyPeace,
+      contract: diplomacyPeaceContract,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });
