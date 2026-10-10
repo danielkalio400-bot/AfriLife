@@ -130,6 +130,15 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             GUILayout.Label("Location: "+_loop.State.CurrentLocation);
             GUILayout.Label("Current action: "+_loop.CurrentStep);
             GUILayout.Label("Walk to: "+FirstNeighborhoodInteractionPolicy.RequiredSite(_loop.CurrentStep));
+            if(_actor!=null && FirstNeighborhoodRouteGuide.TryFind(
+                _loop.CurrentStep,_actor.transform.position,_points,out var route))
+            {
+                string distance=Mathf.CeilToInt(route.DistanceMeters)+" m";
+                GUILayout.Label(route.WithinReach
+                    ? "Destination reached: "+route.Name
+                    : "Next: "+route.Name+" | "+route.Direction+" | "+distance+" straight-line");
+            }
+            else GUILayout.Label("Destination marker unavailable. Validate the demo scene.");
             GUILayout.Label("Keyboard WASD/arrows or touch direction pad to move.");
             GUILayout.Label("Progress: "+_loop.State.NextStep+"/"+FirstNeighborhoodPrototypeLoop.Steps.Length);
             GUILayout.Label("Funds (NGN minor units): "+_loop.CashMinorUnits);

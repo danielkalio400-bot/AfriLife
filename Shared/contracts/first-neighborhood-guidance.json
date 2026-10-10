@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "bulk": 38,
+  "prototype": "fictional Lagos first district",
+  "navigation": {
+    "strategy": "existing interaction markers",
+    "distance": "planar straight-line only",
+    "headings": [
+      "N",
+      "S",
+      "E",
+      "W",
+      "HERE"
+    ],
+    "travelTime": "not estimated"
+  },
+  "editorChecks": [
+    "physical character controller",
+    "scene HUD",
+    "main camera",
+    "exactly one marker per required site",
+    "exactly one of three named residents"
+  ],
+  "upgrade": "repeat-safe repair of marker set without recreating authored player",
+  "saveIsolation": "explicitly reject non-Nigeria/non-Lagos worlds instead of changing their location",
+  "notImplemented": [
+    "NavMesh roads and turn-by-turn routing",
+    "live street maps",
+    "Ghana playable neighborhood scene",
+    "Unity Editor validation run",
+    "Android/iOS/Windows compiled builds"
+  ]
+}

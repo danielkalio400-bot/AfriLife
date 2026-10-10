@@ -30,23 +30,33 @@ namespace AfriLife.Editor
 
         public static void AddToScene(Scene scene)
         {
-            if (GameObject.Find("AfriLife Walkable Player") != null)
-                return; // Do not destroy or replace already authored player content.
+            GameObject root=GameObject.Find("AfriLife Walkable Player");
+            if(root==null)
+            {
+                root = new GameObject("AfriLife Walkable Player");
+                root.transform.position=new Vector3(-11f,0f,-5.6f);
+                var controller=root.AddComponent<CharacterController>();
+                controller.height=2f;
+                controller.center=new Vector3(0f,1f,0f);
+                controller.radius=0.38f;
+                root.AddComponent<FirstNeighborhoodWalkController>();
 
-            var root = new GameObject("AfriLife Walkable Player");
-            root.transform.position=new Vector3(-11f,0f,-5.6f);
-            var controller=root.AddComponent<CharacterController>();
-            controller.height=2f;
-            controller.center=new Vector3(0f,1f,0f);
-            controller.radius=0.38f;
-            root.AddComponent<FirstNeighborhoodWalkController>();
-
-            GameObject visual=GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            visual.name="Original Player Capsule";
-            visual.transform.SetParent(root.transform,false);
-            visual.transform.localPosition=new Vector3(0f,1f,0f);
-            var collision=visual.GetComponent<Collider>();
-            if(collision!=null)Object.DestroyImmediate(collision);
+                GameObject visual=GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                visual.name="Original Player Capsule";
+                visual.transform.SetParent(root.transform,false);
+                visual.transform.localPosition=new Vector3(0f,1f,0f);
+                var collision=visual.GetComponent<Collider>();
+                if(collision!=null)Object.DestroyImmediate(collision);
+            }
+            else
+            {
+                // Missing components can be added without replacing a saved
+                // scene's already-authored player and placement.
+                if(root.GetComponent<CharacterController>()==null)
+                    root.AddComponent<CharacterController>();
+                if(root.GetComponent<FirstNeighborhoodWalkController>()==null)
+                    root.AddComponent<FirstNeighborhoodWalkController>();
+            }
 
             AddMarker("home","Home Entrance",-11f,-6.5f);
             AddMarker("market","Market Counter",9f,-4.8f);
@@ -108,6 +118,15 @@ namespace AfriLife.Editor
 
         private static void AddMarker(string id,string name,float x,float z)
         {
+            GameObject existing=GameObject.Find("Interact - "+name);
+            if(existing!=null)
+            {
+                var marker=existing.GetComponent<FirstNeighborhoodInteractionPoint>();
+                if(marker==null)marker=existing.AddComponent<FirstNeighborhoodInteractionPoint>();
+                marker.SiteId=id;
+                marker.DisplayName=name;
+                return;
+            }
             GameObject point=GameObject.CreatePrimitive(PrimitiveType.Sphere);
             point.name="Interact - "+name;
             point.transform.position=new Vector3(x,0.35f,z);

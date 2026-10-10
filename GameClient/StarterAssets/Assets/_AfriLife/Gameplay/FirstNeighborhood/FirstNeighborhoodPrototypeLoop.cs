@@ -58,6 +58,17 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         {
             _save = save ?? throw new ArgumentNullException(nameof(save));
             _save.Normalize();
+            // This is deliberately a Lagos-only authored blockout. Never
+            // convert another Nigerian city or a Ghana world save silently.
+            if ((!string.IsNullOrWhiteSpace(_save.Player.CountryId) &&
+                 _save.Player.CountryId!="Nigeria") ||
+                (!string.IsNullOrWhiteSpace(_save.Player.CityId) &&
+                 _save.Player.CityId!="Lagos") ||
+                (_save.FirstNeighborhoodPrototype!=null &&
+                 _save.FirstNeighborhoodPrototype.ScenarioId!=
+                 "lagos-first-district-prototype"))
+                throw new InvalidOperationException(
+                    "The Lagos first-neighborhood prototype cannot overwrite another world location.");
             _residents = new FirstNeighborhoodResidentService(_save);
             _save.FirstNeighborhoodPrototype ??= new FirstNeighborhoodPrototypeState();
             State.Normalize(Steps.Length);
