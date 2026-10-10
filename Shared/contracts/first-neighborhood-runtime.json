@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "milestone": "first-serious-playable-neighborhood",
+  "requiredRuntimeSystems": [
+    "housing",
+    "persistent-npcs",
+    "needs",
+    "jobs",
+    "shopping",
+    "banking",
+    "phone-data",
+    "electricity",
+    "telecom",
+    "traffic",
+    "public-transport",
+    "weather",
+    "day-night",
+    "save-load"
+  ],
+  "acceptanceLoop": [
+    "wake",
+    "shower",
+    "dress",
+    "eat",
+    "use-phone",
+    "buy-mobile-data",
+    "travel",
+    "work",
+    "earn-money",
+    "shop",
+    "interact-with-persistent-npcs",
+    "pay-bills",
+    "return-home",
+    "sleep",
+    "save-and-reload"
+  ]
+}

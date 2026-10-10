@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "cityId": "Lagos",
+      "countryId": "Nigeria",
+      "climate": "coastal-humid",
+      "coastal": true,
+      "floodSensitive": true,
+      "harmattanRelevant": true,
+      "transportTags": ["city-bus", "minibus", "ride-hailing", "ferry", "rail"],
+      "economyTags": ["commerce", "finance", "logistics", "technology", "ports"]
+    },
+    {
+      "cityId": "Abuja",
+      "countryId": "Nigeria",
+      "climate": "guinea-savanna",
+      "coastal": false,
+      "floodSensitive": false,
+      "harmattanRelevant": true,
+      "transportTags": ["city-bus", "taxi", "ride-hailing", "coach"],
+      "economyTags": ["public-service", "services", "construction"]
+    },
+    {
+      "cityId": "PortHarcourt",
+      "countryId": "Nigeria",
+      "climate": "coastal-humid",
+      "coastal": true,
+      "floodSensitive": true,
+      "harmattanRelevant": false,
+      "transportTags": ["city-bus", "minibus", "taxi", "ride-hailing"],
+      "economyTags": ["energy", "logistics", "services", "ports"]
+    },
+    {
+      "cityId": "Accra",
+      "countryId": "Ghana",
+      "climate": "coastal-humid",
+      "coastal": true,
+      "floodSensitive": true,
+      "harmattanRelevant": true,
+      "transportTags": ["trotro-minibus", "city-bus", "shared-taxi", "ride-hailing"],
+      "economyTags": ["services", "finance", "technology", "trade"]
+    },
+    {
+      "cityId": "Kumasi",
+      "countryId": "Ghana",
+      "climate": "forest",
+      "coastal": false,
+      "floodSensitive": false,
+      "harmattanRelevant": true,
+      "transportTags": ["trotro-minibus", "city-bus", "shared-taxi", "coach"],
+      "economyTags": ["trade", "manufacturing", "services", "education"]
+    },
+    {
+      "cityId": "Tema",
+      "countryId": "Ghana",
+      "climate": "coastal-humid",
+      "coastal": true,
+      "floodSensitive": true,
+      "harmattanRelevant": true,
+      "transportTags": ["city-bus", "shared-taxi", "ride-hailing", "coach"],
+      "economyTags": ["ports", "logistics", "industry", "trade"]
+    }
+  ],
+  "note": "Durable gameplay archetypes only. Fast-changing values belong in separately versioned balancing data."
+}

@@ -3,6 +3,12 @@ import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { sendJson } from "./http/json.mjs";
 import { handleWorldReference } from "./routes/world-reference.mjs";
+import { handleRuntimeContracts } from "./routes/runtime-contracts.mjs";
+import {
+  cityRuntimeProfiles,
+  neighborhoodRuntime,
+  publicTransitRuntime,
+} from "./runtime-contracts.mjs";
 import {
   nigeriaReference,
   ghanaReference,
@@ -46,6 +52,9 @@ export function makeServer() {
         education: "client-foundation",
         persistentNpcs: "client-foundation",
         vehicles: "client-foundation",
+        firstNeighborhoodRuntime: "client-foundation",
+        publicTransitRuntime: "contract-foundation",
+        utilityInterdependence: "client-foundation",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -67,6 +76,12 @@ export function makeServer() {
       ghana: ghanaReference,
       crossBorder: crossBorderReference,
       sources: researchSources,
+    })) return;
+
+    if (handleRuntimeContracts(req, res, path, {
+      cities: cityRuntimeProfiles,
+      neighborhood: neighborhoodRuntime,
+      transit: publicTransitRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });

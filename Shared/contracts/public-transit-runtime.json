@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "systems": [
+    "stops",
+    "routes",
+    "timetables",
+    "fares",
+    "drivers",
+    "passenger-capacity",
+    "service-disruptions"
+  ],
+  "supportedTypes": [
+    "city-bus",
+    "minibus",
+    "shared-taxi",
+    "ride-hailing",
+    "brt",
+    "coach",
+    "rail",
+    "ferry"
+  ]
+}
