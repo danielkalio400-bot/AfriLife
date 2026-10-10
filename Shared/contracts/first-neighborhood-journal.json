@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "bulk": 44,
+  "feature": "read-only in-world neighborhood journal",
+  "pages": [
+    "Today",
+    "Places",
+    "People",
+    "Errands"
+  ],
+  "backing": "existing WorldSaveData.FirstNeighborhoodPrototype",
+  "contents": [
+    "day progression and waiting quota",
+    "seven saved landmark discoveries",
+    "three original NPC conversation counts",
+    "four once-per-game-day errand receipts"
+  ],
+  "writeBehavior": "none; no new ledger, world save slot, money or XP authority",
+  "platforms": [
+    "Android",
+    "iOS",
+    "Windows"
+  ],
+  "limitations": [
+    "fictional original Lagos blockout",
+    "no Unity runtime testing or finished assets",
+    "does not represent production city simulation"
+  ]
+}

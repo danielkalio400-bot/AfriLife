@@ -10,6 +10,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private Vector2 _scroll;
         private string _message="Use the action button to follow the first day.";
         private bool _saveVerified;
+        private bool _journalVisible;
+        private int _journalPage;
         private readonly string[] _errandLabels = {
             "Clinic check-in - NGN 1.20","Market supplies - NGN 1.80",
             "Park cleanup - NGN 0.75 earned","Help a neighbor"
@@ -184,6 +186,20 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             if(_loop.CurrentStep=="interact-with-persistent-npcs")
                 GUILayout.Label("Stand near a named resident at the neighbor marker.");
             GUILayout.Label("Resident conversations: "+_loop.State.ConversationCount);
+            if(GUILayout.Button(_journalVisible?"Hide neighborhood journal":
+                "Open neighborhood journal",GUILayout.MinHeight(38)))
+                _journalVisible=!_journalVisible;
+            if(_journalVisible)
+            {
+                GUILayout.BeginHorizontal();
+                for(int i=0;i<FirstNeighborhoodJournal.Pages.Length;i++)
+                    if(GUILayout.Button(FirstNeighborhoodJournal.Pages[i],
+                        GUILayout.MinHeight(35)))
+                        _journalPage=i;
+                GUILayout.EndHorizontal();
+                GUILayout.Label(FirstNeighborhoodJournal.Render(
+                    _loop.State,_journalPage));
+            }
             GUILayout.Label("Physical movement with scripted interactions; not a complete open world.");
             GUILayout.Label("Optional neighborhood errands (once per game day):");
             for(int i=0;i<FirstNeighborhoodErrandService.ErrandIds.Length;i++)
