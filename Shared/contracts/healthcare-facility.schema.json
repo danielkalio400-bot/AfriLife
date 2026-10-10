@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://afrilife.invalid/contracts/healthcare-facility.schema.json",
+  "title": "AfriLife Healthcare Facility",
+  "type": "object",
+  "required": ["facilityId", "displayName", "countryId", "cityId", "type", "capacity"],
+  "properties": {
+    "facilityId": { "type": "string", "minLength": 1 },
+    "displayName": { "type": "string", "minLength": 1 },
+    "countryId": { "enum": ["Nigeria", "Ghana"] },
+    "cityId": { "type": "string", "minLength": 1 },
+    "type": {
+      "enum": ["clinic", "hospital", "emergency-department", "pharmacy", "laboratory", "imaging-center", "rehabilitation-center", "maternity-center", "blood-service-center", "mortuary"]
+    },
+    "capacity": { "type": "integer", "minimum": 0 },
+    "open": { "type": "boolean" }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "phase": 24,
+  "systems": [
+    "clinics",
+    "hospitals",
+    "emergency-departments",
+    "ambulances",
+    "pharmacies",
+    "labs",
+    "imaging",
+    "wards",
+    "surgery-high-level",
+    "rehabilitation",
+    "maternity",
+    "blood-services",
+    "mortuary",
+    "hospital-power-backup",
+    "staffing",
+    "medical-supply-chains"
+  ],
+  "designRule": "Healthcare gameplay is high-level, non-graphic simulation. It does not provide real medical diagnosis or treatment instructions."
+}
