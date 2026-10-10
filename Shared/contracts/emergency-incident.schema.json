@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://afrilife.invalid/contracts/emergency-incident.schema.json",
+  "title": "AfriLife Emergency Incident",
+  "type": "object",
+  "required": ["incidentId", "regionId", "type", "priority", "status"],
+  "properties": {
+    "incidentId": { "type": "string", "minLength": 1 },
+    "regionId": { "type": "string", "minLength": 1 },
+    "type": {
+      "enum": ["medical", "fire", "road-incident", "vehicle-breakdown", "public-safety", "utility-failure", "other"]
+    },
+    "priority": { "enum": ["low", "normal", "high", "critical"] },
+    "status": { "enum": ["open", "units-assigned", "responding", "transporting", "resolved", "closed"] }
+  }
+}

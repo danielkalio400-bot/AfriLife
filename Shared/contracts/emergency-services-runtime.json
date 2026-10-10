@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "phase": 25,
+  "systems": [
+    "emergency-calls",
+    "dispatch-center",
+    "police",
+    "ambulance",
+    "fire-service",
+    "tow-service",
+    "roadside-assistance",
+    "incident-priority",
+    "unit-assignment",
+    "scene-management",
+    "hospital-transport",
+    "traffic-diversion",
+    "after-incident-reports"
+  ],
+  "designRule": "Emergency gameplay is high-level and consequence-focused. It does not provide tactical violence, hazardous response procedures, or real emergency-service instructions."
+}
