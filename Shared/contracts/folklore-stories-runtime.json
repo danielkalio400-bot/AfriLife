@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "phase": 40,
+  "bulk": 28,
+  "countries": [
+    "Nigeria",
+    "Ghana"
+  ],
+  "defaultMode": "off",
+  "modes": [
+    "off",
+    "ambiguous",
+    "supernatural"
+  ],
+  "themes": [
+    "lamplit-hall",
+    "harbor-lights",
+    "quiet-courtyard",
+    "night-market-echo",
+    "old-library",
+    "distant-footsteps"
+  ],
+  "choices": [
+    "observe",
+    "ask-neighbor",
+    "investigate",
+    "reassure",
+    "leave"
+  ],
+  "stages": [
+    "strange-signs",
+    "investigating",
+    "resolved"
+  ],
+  "consequenceScope": [
+    "property-reputation",
+    "household-uncertainty",
+    "fictional-story-history"
+  ],
+  "descriptions": {
+    "ambiguous": "Events may remain unexplained, or have plausible natural causes; no definitive supernatural claim.",
+    "supernatural": "Explicitly fictional paranormal interpretation, optional and entirely non-graphic.",
+    "off": "Default. No story progression, notifications or journal access."
+  },
+  "safety": [
+    "no real-world rituals or methods",
+    "no real deities classified as monsters",
+    "no cultural or religious stereotyping",
+    "no minors sexualized",
+    "no graphic harm",
+    "no official alerts or current-news claims",
+    "never opt in automatically"
+  ],
+  "persistence": "In-memory gameplay service; SQL only models future persistence and is not connected.",
+  "authentication": "Developer-only unauthenticated API; production requires authenticated character ownership.",
+  "source": "Unified Master Specification Part I §37 and Phase 40, pp. 32–33 and 57–58"
+}

@@ -64,6 +64,9 @@ import { newsMediaRuntime } from "./news-media-contracts.mjs";
 import { EnvironmentalResponseService } from "./services/environmental-response.mjs";
 import { handleEnvironmentalResponse } from "./routes/environmental-response.mjs";
 import { environmentalResponseRuntime } from "./environmental-response-contracts.mjs";
+import { FolkloreStoriesService } from "./services/folklore-stories.mjs";
+import { handleFolkloreStories } from "./routes/folklore-stories.mjs";
+import { folkloreRuntime } from "./folklore-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -134,6 +137,7 @@ export function makeServer() {
   const weatherEnvironment = new WeatherEnvironmentService();
   const newsMedia = new NewsMediaService();
   const environmentalResponse = new EnvironmentalResponseService({ weather: weatherEnvironment, media: newsMedia });
+  const folkloreStories = new FolkloreStoriesService();
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -194,6 +198,7 @@ export function makeServer() {
         weatherEnvironment: "local-normalized-environment-effects-prototype",
         newsMedia: "local-fictional-world-news-prototype",
         environmentalResponse: "local-fictional-recovery-prototype",
+        folkloreStories: "local-opt-in-fictional-folklore-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -345,6 +350,11 @@ export function makeServer() {
     if (await handleEnvironmentalResponse(req, res, path, {
       responseService: environmentalResponse,
       contract: environmentalResponseRuntime,
+    })) return;
+
+    if (await handleFolkloreStories(req, res, path, {
+      stories: folkloreStories,
+      contract: folkloreRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });
