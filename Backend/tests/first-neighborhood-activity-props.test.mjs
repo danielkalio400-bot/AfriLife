@@ -34,8 +34,8 @@ test("Unity HUD never skips site or prop gate when player controller is missing"
 test("Editor builder and scene validator include physical props without duplicate creation",()=>{
  const build=unity("Editor/FirstNeighborhoodWalkLayerBuilder.cs");
  const inspect=unity("Editor/FirstNeighborhoodSceneValidator.cs");
- assert.match(build,/AddActivityProps\(\)/);
- assert.match(build,/GameObject.Find\(name\)/);
+ assert.match(build,/AddActivityProps\(scene\)/);
+ assert.match(build,/FindInScene\(scene,name\)/);
  assert.match(inspect,/Expected one activity prop for/);
  assert.match(inspect,/FirstNeighborhoodPrototypeLoop.Steps/);
 });

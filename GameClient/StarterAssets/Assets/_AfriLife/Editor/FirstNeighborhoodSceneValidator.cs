@@ -30,6 +30,7 @@ namespace AfriLife.Editor
                     "Prototype scene is missing; build it in the Unity Editor first.","OK");
                 return;
             }
+            if(!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())return;
             Scene scene=EditorSceneManager.OpenScene(ScenePath,OpenSceneMode.Single);
             List<string> problems=Inspect();
             if(problems.Count==0)

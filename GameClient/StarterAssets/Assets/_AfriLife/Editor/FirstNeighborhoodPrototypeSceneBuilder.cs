@@ -31,12 +31,24 @@ namespace AfriLife.Editor
         {
             const string path="Assets/_AfriLife/Scenes/FirstNeighborhoodPrototype.unity";
             if(System.IO.File.Exists(path))return;
-            var current=SceneManager.GetActiveScene();
-            if(current.IsValid() && current.isDirty)
-                throw new System.InvalidOperationException(
-                    "Save the currently modified Unity scene before unattended prototype generation.");
-            var scene=EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects,
-                NewSceneMode.Single);
+            // Preserve named scenes. Only replace a clean, untitled startup scene.
+            Scene previous=SceneManager.GetActiveScene();
+            bool startupScene=SceneManager.sceneCount==1 && previous.IsValid() &&
+                string.IsNullOrEmpty(previous.path) && !previous.isDirty;
+            for(int i=0;i<SceneManager.sceneCount;i++)
+            {
+                Scene opened=SceneManager.GetSceneAt(i);
+                if(opened.isLoaded && (opened.isDirty ||
+                    (!startupScene && string.IsNullOrEmpty(opened.path))))
+                    throw new System.InvalidOperationException(
+                        "Save all open Unity scenes before generating the neighborhood.");
+            }
+            bool additive=!startupScene;
+            Scene scene=EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects,
+                additive ? NewSceneMode.Additive : NewSceneMode.Single);
+            SceneManager.SetActiveScene(scene);
+            try
+            {
             GameObject root=new GameObject("First Neighborhood Scripted Demo");
             root.AddComponent<FirstNeighborhoodPrototypeHud>();
 
@@ -48,7 +60,7 @@ namespace AfriLife.Editor
             CreateBlock("Bank",new Vector3(-7f,1f,10f),new Vector3(4f,2f,4f));
             CreateBlock("Clinic",new Vector3(0f,1f,12f),new Vector3(4f,2f,4f));
 
-            Camera camera=Camera.main;
+            Camera camera=FirstNeighborhoodWalkLayerBuilder.FindSceneCamera(scene);
             if(camera!=null)
             {
                 camera.transform.position=new Vector3(0f,33f,-25f);
@@ -57,8 +69,18 @@ namespace AfriLife.Editor
 
             System.IO.Directory.CreateDirectory("Assets/_AfriLife/Scenes");
             FirstNeighborhoodWalkLayerBuilder.AddToScene(scene);
-            EditorSceneManager.SaveScene(scene,path);
+            if(!EditorSceneManager.SaveScene(scene,path))
+                throw new System.InvalidOperationException("Unity could not save prototype scene.");
             AssetDatabase.Refresh();
+            }
+            finally
+            {
+                if(additive)
+                {
+                    if(previous.IsValid())SceneManager.SetActiveScene(previous);
+                    if(scene.IsValid())EditorSceneManager.CloseScene(scene,true);
+                }
+            }
         }
 
         private static void CreateBlock(string name,Vector3 position,Vector3 scale)

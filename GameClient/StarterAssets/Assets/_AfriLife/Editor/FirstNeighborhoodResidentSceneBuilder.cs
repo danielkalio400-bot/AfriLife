@@ -21,6 +21,7 @@ namespace AfriLife.Editor
                     "Build the first-neighborhood scene before adding residents.", "OK");
                 return;
             }
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
             Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
             AddToScene(scene);
             EditorSceneManager.SaveScene(scene, ScenePath);

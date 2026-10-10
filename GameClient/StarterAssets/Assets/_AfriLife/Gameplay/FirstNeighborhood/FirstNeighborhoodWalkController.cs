@@ -39,12 +39,32 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) z += 1f;
             if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) z -= 1f;
 #endif
+#if ENABLE_INPUT_SYSTEM
+            // Use a physical controller on mobile and Windows without synthetic touches.
+            Gamepad pad = Gamepad.current;
+            if (pad != null)
+            {
+                Vector2 stick = pad.leftStick.ReadValue();
+                if (stick.sqrMagnitude >= 0.0225f)
+                {
+                    x = stick.x;
+                    z = stick.y;
+                }
+            }
+#endif
             Vector3 movement = new Vector3(x,0f,z);
             if (movement.sqrMagnitude > 1f) movement.Normalize();
             _controller.SimpleMove(movement * WalkingSpeed);
             if (movement.sqrMagnitude > 0.01f)
                 transform.rotation = Quaternion.Slerp(transform.rotation,
                     Quaternion.LookRotation(movement),Time.deltaTime * 12f);
+        }
+
+        // A pause or lost window focus must not leave touch navigation stuck.
+        private void OnDisable() { _up=_down=_left=_right=false; }
+        private void OnApplicationFocus(bool focused)
+        {
+            if(!focused)_up=_down=_left=_right=false;
         }
 
         public void Restore(FirstNeighborhoodPrototypeState state)

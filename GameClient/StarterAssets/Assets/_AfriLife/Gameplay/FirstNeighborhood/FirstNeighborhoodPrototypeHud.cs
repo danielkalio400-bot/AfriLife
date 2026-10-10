@@ -167,7 +167,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                         Mathf.CeilToInt(landmarkCue.DirectMeters)+" m direct");
                 else GUILayout.Label("Journal guide: landmark marker unavailable.");
             }
-            GUILayout.Label("Keyboard WASD/arrows or touch direction pad to move.");
+            GUILayout.Label("Keyboard WASD/arrows, controller left stick or touch pad to move.");
             GUILayout.Label("Progress: "+_loop.State.NextStep+"/"+FirstNeighborhoodPrototypeLoop.Steps.Length);
             GUILayout.Label("Funds (NGN minor units): "+_loop.CashMinorUnits);
             GUILayout.Label("Days completed: "+_loop.CompletedDays);
