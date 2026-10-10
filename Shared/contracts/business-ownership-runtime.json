@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "systems": [
+    "registration",
+    "premises",
+    "employees",
+    "salaries",
+    "inventory",
+    "suppliers",
+    "pricing",
+    "advertising",
+    "taxes",
+    "profit-loss",
+    "branches",
+    "expansion",
+    "bankruptcy",
+    "competition",
+    "reputation"
+  ],
+  "rule": "Financial values are game-balance values rather than real business or tax advice."
+}

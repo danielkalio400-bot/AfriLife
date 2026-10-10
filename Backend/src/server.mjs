@@ -7,6 +7,13 @@ import { handleRuntimeContracts } from "./routes/runtime-contracts.mjs";
 import { handleOperationsContracts } from "./routes/operations-contracts.mjs";
 import { handleSimulationContracts } from "./routes/simulation-contracts.mjs";
 import { handleEnergyContracts } from "./routes/energy-contracts.mjs";
+import { handleCommerce } from "./routes/commerce.mjs";
+import { MarketplaceService } from "./services/marketplace.mjs";
+import { BusinessOwnershipService } from "./services/business-ownership.mjs";
+import {
+  marketplaceRuntime,
+  businessOwnershipRuntime,
+} from "./commerce-contracts.mjs";
 import {
   backupEnergyRuntime,
   fuelEconomyRuntime,
@@ -51,7 +58,10 @@ import {
 } from "./contracts.mjs";
 
 export function makeServer() {
-  return createServer((req, res) => {
+  const marketplace = new MarketplaceService();
+  const businesses = new BusinessOwnershipService();
+
+  return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
 
     if (req.method === "GET" && path === "/health") {
@@ -89,6 +99,8 @@ export function makeServer() {
         fuelEconomy: "client-foundation",
         telecomBilling: "client-foundation",
         maintenanceServices: "client-foundation",
+        marketplace: "local-in-memory-prototype",
+        businessOwnership: "local-in-memory-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -137,6 +149,15 @@ export function makeServer() {
       fuel: fuelEconomyRuntime,
       telecom: telecomBillingRuntime,
       maintenance: maintenanceBusinessRuntime,
+    })) return;
+
+    if (await handleCommerce(req, res, path, {
+      marketplace,
+      businesses,
+      contracts: {
+        marketplace: marketplaceRuntime,
+        businesses: businessOwnershipRuntime,
+      },
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });

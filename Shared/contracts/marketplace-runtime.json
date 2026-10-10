@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "systems": [
+    "physical-stores",
+    "supermarkets",
+    "markets",
+    "online-marketplace",
+    "product-search",
+    "cart",
+    "checkout",
+    "reviews",
+    "sellers",
+    "producer-profiles",
+    "warehouses",
+    "deliveries",
+    "returns",
+    "refunds",
+    "seller-disputes",
+    "cross-border-sourcing"
+  ],
+  "countryRule": "Nigeria and Ghana seller/producer participation should be balanced by gameplay content, not hard-coded stereotypes."
+}
