@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "phase": 37,
+  "systems": [
+    "government-revenue-account",
+    "sovereign-reserve-fund",
+    "citizen-dividend-fund",
+    "protected-accounts",
+    "automatic-distribution",
+    "auditing",
+    "public-transparency",
+    "eligibility",
+    "daily-periodic-payments",
+    "economy-impact"
+  ],
+  "countries": {
+    "Nigeria": "NGN",
+    "Ghana": "GHS"
+  },
+  "fundTypes": [
+    "government-revenue",
+    "sovereign-reserve",
+    "citizen-dividend"
+  ],
+  "designRule": "National revenue and citizen-dividend systems are fictional game-economy mechanics. Eligibility, balances, distribution formulas and impact metrics are not real Nigerian or Ghanaian policy, law, entitlement guidance, or financial advice.",
+  "privacyRule": "Public transparency exposes aggregated fund and payment totals only; person identifiers are excluded from public snapshots."
+}
