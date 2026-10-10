@@ -20,7 +20,8 @@ test("nearest undiscovered ignores already visited sites and honours true marker
  const atHome={x:-11,z:-6.5};
  const picked=closest(state,atHome);
  assert.equal(picked.ok,true);
- assert.equal(picked.siteId,"market");
+ // From the authored home marker, the bank is closer than the market.
+ assert.equal(picked.siteId,"bank");
  const sites=[{id:"clinic",x:0,z:8.9}];
  assert.equal(closest(state,atHome,{sites}).siteId,"clinic");
  assert.equal(cue("market",atHome,{sites}).error,"missing_landmark_marker");
