@@ -10,6 +10,10 @@ import { handleEnergyContracts } from "./routes/energy-contracts.mjs";
 import { handleCommerce } from "./routes/commerce.mjs";
 import { MarketplaceService } from "./services/marketplace.mjs";
 import { BusinessOwnershipService } from "./services/business-ownership.mjs";
+import { handleProperty } from "./routes/property.mjs";
+import { RealEstateService } from "./services/real-estate.mjs";
+import { ConstructionService } from "./services/construction.mjs";
+import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
   businessOwnershipRuntime,
@@ -60,6 +64,8 @@ import {
 export function makeServer() {
   const marketplace = new MarketplaceService();
   const businesses = new BusinessOwnershipService();
+  const realEstate = new RealEstateService();
+  const construction = new ConstructionService();
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -101,6 +107,8 @@ export function makeServer() {
         maintenanceServices: "client-foundation",
         marketplace: "local-in-memory-prototype",
         businessOwnership: "local-in-memory-prototype",
+        realEstate: "local-in-memory-prototype",
+        construction: "local-in-memory-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -157,6 +165,15 @@ export function makeServer() {
       contracts: {
         marketplace: marketplaceRuntime,
         businesses: businessOwnershipRuntime,
+      },
+    })) return;
+
+    if (await handleProperty(req, res, path, {
+      realEstate,
+      construction,
+      contracts: {
+        realEstate: realEstateRuntime,
+        construction: constructionRuntime,
       },
     })) return;
 

@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "systems": [
+    "construction",
+    "contractors",
+    "architects",
+    "engineers",
+    "materials",
+    "workers",
+    "construction-phases",
+    "renovation",
+    "repairs",
+    "ai-assisted-house-design"
+  ],
+  "phases": [
+    "planning",
+    "site-preparation",
+    "foundation",
+    "structure",
+    "roofing",
+    "utilities",
+    "interior",
+    "exterior",
+    "inspection",
+    "completed"
+  ],
+  "designRule": "AI-assisted house design generates in-game concepts only and does not replace professional real-world architectural or engineering review."
+}

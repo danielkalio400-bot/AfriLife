@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "systems": [
+    "land-purchase",
+    "property-ownership",
+    "rent",
+    "mortgages",
+    "tenants",
+    "landlords",
+    "property-value",
+    "neighborhood-value"
+  ],
+  "rule": "Property prices, rent and mortgage rates are fictional game-balance values rather than financial advice or live market data."
+}
