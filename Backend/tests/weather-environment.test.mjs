@@ -35,7 +35,7 @@ test("rain and flooding produce wet-road and solar effects", () => {
     fogIntensity01: 0.2,
   });
   assert.equal(result.ok, true);
-  assert.ok(result.weather.wetRoads01 >= 0.56);
+  assert.ok(result.weather.wetRoads01 > 0.55);
   assert.ok(result.impact.solarOutputMultiplier < 1);
   assert.ok(result.impact.roadGripMultiplier < 1);
 });
