@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "status": "prototype-catalog",
+  "jobs": [
+    {
+      "jobId": "ng-office-assistant",
+      "country": "Nigeria",
+      "type": "Office",
+      "currency": "NGN",
+      "payPerShiftMinorUnits": 1800000,
+      "shiftHours": 8
+    },
+    {
+      "jobId": "gh-retail-associate",
+      "country": "Ghana",
+      "type": "Retail",
+      "currency": "GHS",
+      "payPerShiftMinorUnits": 18000,
+      "shiftHours": 8
+    }
+  ]
+}

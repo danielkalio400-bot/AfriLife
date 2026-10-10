@@ -24,7 +24,7 @@ test("status declares all committed platforms", async () => {
   });
 });
 
-test("cities, systems and daily-life milestone are exposed", async () => {
+test("core catalogs are exposed", async () => {
   await withServer(async base => {
     const cities = await (await fetch(`${base}/v1/cities`)).json();
     assert.ok(cities.countries.Nigeria.includes("Lagos"));
@@ -36,6 +36,15 @@ test("cities, systems and daily-life milestone are exposed", async () => {
 
     const milestone = await (await fetch(`${base}/v1/milestones/daily-life`)).json();
     assert.ok(milestone.steps.includes("save-and-reload"));
+
+    const jobs = await (await fetch(`${base}/v1/jobs`)).json();
+    assert.ok(jobs.jobs.length >= 2);
+
+    const shop = await (await fetch(`${base}/v1/shop`)).json();
+    assert.ok(shop.products.some(product => product.inventoryItemId === "meal-basic"));
+
+    const bills = await (await fetch(`${base}/v1/bill-types`)).json();
+    assert.ok(bills.types.includes("electricity"));
   });
 });
 

@@ -6,6 +6,9 @@ import {
   systemRegistry,
   platformTargets,
   dailyLifeLoop,
+  jobsCatalog,
+  shopCatalog,
+  billTypes,
 } from "./contracts.mjs";
 
 function send(res, status, body) {
@@ -32,24 +35,30 @@ export function makeServer() {
     if (req.method === "GET" && path === "/v1/status") {
       return send(res, 200, {
         project: "AfriLife",
-        stage: "foundation-development",
+        stage: "daily-life-foundation",
         productionReady: false,
         persistentOnlineWorld: "not-implemented",
+        economySimulation: "prototype-contracts",
+        jobs: "prototype-catalog",
+        shopping: "prototype-catalog",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
 
     if (req.method === "GET" && path === "/v1/cities")
       return send(res, 200, cityCatalog);
-
     if (req.method === "GET" && path === "/v1/systems")
       return send(res, 200, systemRegistry);
-
     if (req.method === "GET" && path === "/v1/platforms")
       return send(res, 200, platformTargets);
-
     if (req.method === "GET" && path === "/v1/milestones/daily-life")
       return send(res, 200, dailyLifeLoop);
+    if (req.method === "GET" && path === "/v1/jobs")
+      return send(res, 200, jobsCatalog);
+    if (req.method === "GET" && path === "/v1/shop")
+      return send(res, 200, shopCatalog);
+    if (req.method === "GET" && path === "/v1/bill-types")
+      return send(res, 200, billTypes);
 
     return send(res, 404, { error: "not_found" });
   });

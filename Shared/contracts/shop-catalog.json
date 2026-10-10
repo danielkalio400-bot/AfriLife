@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "status": "prototype-catalog",
+  "products": [
+    {
+      "productId": "meal-basic-ng",
+      "country": "Nigeria",
+      "currency": "NGN",
+      "priceMinorUnits": 250000,
+      "inventoryItemId": "meal-basic",
+      "quantity": 1
+    },
+    {
+      "productId": "data-plan-ng-small",
+      "country": "Nigeria",
+      "currency": "NGN",
+      "priceMinorUnits": 120000,
+      "inventoryItemId": "data-voucher",
+      "quantity": 1
+    },
+    {
+      "productId": "meal-basic-gh",
+      "country": "Ghana",
+      "currency": "GHS",
+      "priceMinorUnits": 3500,
+      "inventoryItemId": "meal-basic",
+      "quantity": 1
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "types": [
+    "electricity",
+    "water",
+    "internet",
+    "mobile-data",
+    "rent",
+    "mortgage",
+    "waste",
+    "security"
+  ]
+}
