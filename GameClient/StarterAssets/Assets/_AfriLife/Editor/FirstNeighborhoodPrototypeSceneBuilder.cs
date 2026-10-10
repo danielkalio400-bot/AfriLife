@@ -20,6 +20,21 @@ namespace AfriLife.Editor
                 return;
             }
 
+            BuildUnattended();
+            EditorUtility.DisplayDialog("Prototype created",
+                "Primitive buildings, a movable capsule and walk-to-interact markers were created. No city AI or driving is implemented.","OK");
+        }
+
+        // The same scene generator is callable by Unity -batchmode, without
+        // modal Editor dialogs or overwriting an existing authored scene.
+        public static void BuildUnattended()
+        {
+            const string path="Assets/_AfriLife/Scenes/FirstNeighborhoodPrototype.unity";
+            if(System.IO.File.Exists(path))return;
+            var current=SceneManager.GetActiveScene();
+            if(current.IsValid() && current.isDirty)
+                throw new System.InvalidOperationException(
+                    "Save the currently modified Unity scene before unattended prototype generation.");
             var scene=EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects,
                 NewSceneMode.Single);
             GameObject root=new GameObject("First Neighborhood Scripted Demo");
@@ -44,8 +59,6 @@ namespace AfriLife.Editor
             FirstNeighborhoodWalkLayerBuilder.AddToScene(scene);
             EditorSceneManager.SaveScene(scene,path);
             AssetDatabase.Refresh();
-            EditorUtility.DisplayDialog("Prototype created",
-                "Primitive buildings, a movable capsule and walk-to-interact markers were created. No city AI or driving is implemented.","OK");
         }
 
         private static void CreateBlock(string name,Vector3 position,Vector3 scale)
