@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "phase": 34,
+  "systems": [
+    "warehouses",
+    "trucks",
+    "ports-link",
+    "rail-freight-link",
+    "air-cargo-link",
+    "couriers",
+    "customs-high-level",
+    "distribution-centers",
+    "inventory-movement",
+    "delivery-tracking",
+    "supply-shortages",
+    "alternative-suppliers",
+    "fuel-dependency"
+  ],
+  "transportModes": ["truck", "rail-freight", "air-cargo", "maritime-cargo", "courier"],
+  "designRule": "Logistics is modeled as high-level inventory, capacity, routing and economy state. Customs is abstract administrative state; no smuggling, inspection-bypass, evasion or hazardous cargo instructions are included."
+}

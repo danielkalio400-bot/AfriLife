@@ -43,6 +43,9 @@ import { maritimeRuntime } from "./maritime-contracts.mjs";
 import { handleRail } from "./routes/rail.mjs";
 import { RailService } from "./services/rail.mjs";
 import { railRuntime } from "./rail-contracts.mjs";
+import { handleLogistics } from "./routes/logistics.mjs";
+import { LogisticsService } from "./services/logistics.mjs";
+import { logisticsRuntime } from "./logistics-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -106,6 +109,7 @@ export function makeServer() {
   const aviation = new AviationService();
   const maritime = new MaritimeService();
   const rail = new RailService();
+  const logistics = new LogisticsService();
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -159,6 +163,7 @@ export function makeServer() {
         airportsAviation: "local-high-level-transport-prototype",
         maritimeTransport: "local-high-level-transport-economy-prototype",
         railSystem: "local-high-level-transport-economy-prototype",
+        logisticsSupplyChains: "local-high-level-economy-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -275,6 +280,11 @@ export function makeServer() {
     if (await handleRail(req, res, path, {
       rail,
       contract: railRuntime,
+    })) return;
+
+    if (await handleLogistics(req, res, path, {
+      logistics,
+      contract: logisticsRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });
