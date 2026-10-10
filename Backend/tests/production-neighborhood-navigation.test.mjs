@@ -9,7 +9,7 @@ test("production resident navigation uses baked NavMesh paths and never clips th
   const install=source("Editor/AfriLifeProductionArtInstaller.cs");
   assert.match(agent,/using UnityEngine\.AI;/);
   assert.match(agent,/NavMeshAgent _navigation/);
-  assert.match(agent,/if \(!_navigation\.isOnNavMesh\) return/);
+  assert.match(agent,/if \(!_navigation\.isOnNavMesh\)\s*\{[\s\S]*?return;/);
   assert.match(agent,/NavMesh\.SamplePosition\(/);
   assert.match(agent,/_navigation\.SetDestination\(navGoal\.position\)/);
   assert.match(agent,/if \(_navigation != null && _navigation\.enabled\)/);
