@@ -23,25 +23,19 @@ test("Unity batch commands target a real scene and supported mobile/desktop plat
  assert.throws(()=>parseOptions(["--unity","u","--project","p",
   "--platform","windows","--output","not.exe.apk"]),/windows_output_must_be_exe/);
 });
-test("artifact checks require real generated path, not just a claimed successful exit",()=>{
- const dir=mkdtempSync(join(tmpdir(),"afri47-"));
+test("the build command only accepts inspected real-format outputs",()=>{
+ const folder=mkdtempSync(join(tmpdir(),"source-only-"));
  try{
-  const android=join(dir,"game.apk");
-  assert.equal(artifactReady({platform:"android",output:android}),false);
-  writeFileSync(android,"");
-  assert.equal(artifactReady({platform:"android",output:android}),false);
-  writeFileSync(android,"unit-test-fixture");
-  assert.equal(artifactReady({platform:"android",output:android}),true);
-  const windows=join(dir,"game.exe");
-  writeFileSync(windows,"unit-test-fixture");
-  assert.equal(artifactReady({platform:"windows",output:windows}),false);
-  mkdirSync(join(dir,"game_Data"));
-  assert.equal(artifactReady({platform:"windows",output:windows}),true);
-  const ios=join(dir,"xcode");mkdirSync(ios);
-  assert.equal(artifactReady({platform:"ios",output:ios}),false);
-  mkdirSync(join(ios,"Unity-iPhone.xcodeproj"));
-  assert.equal(artifactReady({platform:"ios",output:ios}),true);
- }finally{rmSync(dir,{force:true,recursive:true});}
+  const apk=join(folder,"demo.apk");
+  writeFileSync(apk,"ordinary text is not an Android game");
+  assert.equal(artifactReady({platform:"android",output:apk}),false);
+  const exe=join(folder,"demo.exe");
+  writeFileSync(exe,"text");mkdirSync(join(folder,"demo_Data"));
+  assert.equal(artifactReady({platform:"windows",output:exe}),false);
+  const xcode=join(folder,"xcode");mkdirSync(xcode);
+  mkdirSync(join(xcode,"Unity-iPhone.xcodeproj"));
+  assert.equal(artifactReady({platform:"ios",output:xcode}),false);
+ }finally{rmSync(folder,{recursive:true,force:true});}
 });
 test("missing real Unity projects fail before invoking the compiler",()=>{
  const dir=mkdtempSync(join(tmpdir(),"afri-empty-"));
