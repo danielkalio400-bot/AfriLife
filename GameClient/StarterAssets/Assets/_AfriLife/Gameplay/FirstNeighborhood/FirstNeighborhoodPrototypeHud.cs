@@ -13,6 +13,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private FirstNeighborhoodInteractionPoint[] _points;
         private FirstNeighborhoodResidentAgent[] _residents;
         private float _nextScheduleRefresh;
+        private FirstNeighborhoodResidentDirector _resident;
         private float _nextAutoSave;
         private void Start()
         {
@@ -22,6 +23,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             _residents=FindObjectsByType<FirstNeighborhoodResidentAgent>(FindObjectsSortMode.None);
             _nextScheduleRefresh=Time.unscaledTime;
             if (_actor!=null)_actor.Restore(_loop.State);
+            _resident=FindFirstObjectByType<FirstNeighborhoodResidentDirector>();
+            _resident?.Bind(_loop.SaveData);
             _nextAutoSave=Time.unscaledTime+6f;
         }
 
@@ -36,7 +39,10 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 {
                     if(agent==null)continue;
                     var npc=_loop.Residents.Find(agent.ResidentId);
-                    if(npc!=null)agent.SetDestination(npc.CurrentLocationId,npc.Sleeping);
+                    if(npc==null)continue;
+                    if(_resident!=null && _resident.Resident==agent)
+                        _resident.ApplyStep(_loop.State.NextStep);
+                    else agent.SetDestination(npc.CurrentLocationId,npc.Sleeping);
                 }
             }
             if (_actor==null || Time.unscaledTime < _nextAutoSave)return;
@@ -47,6 +53,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         private void SavePlayerPosition()
         {
             _actor?.Capture(_loop.State);
+            _resident?.ApplyStep(_loop.State.NextStep);
             LocalWorldSaveStore.Save(_loop.SaveData);
         }
 
@@ -110,6 +117,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                     {
                         _loop=new FirstNeighborhoodPrototypeLoop(reloaded);
                         _actor?.Restore(_loop.State);
+                        _resident?.Bind(_loop.SaveData);
                         _saveVerified=_loop.CompleteAfterVerifiedReload(out _message);
                         if(_saveVerified)SavePlayerPosition();
                     }
@@ -136,19 +144,26 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 {
                     FirstNeighborhoodResidentAgent agent=ClosestResident();
                     if(agent==null)
-                        _message="Move close to an available neighborhood resident.";
+                        _message="Walk closer to a named resident.";
+                    else if(_resident!=null && _resident.Resident==agent &&
+                        !_resident.CanConverse(_actor.transform.position,out _message))
+                    {
+                        // The original director must also permit this action.
+                    }
                     else if(_loop.TryAdvance(out _message,agent.ResidentId))
+                    {
+                        if(_resident!=null && _resident.Resident==agent)
+                            _resident.RecordConversation();
                         SavePlayerPosition();
+                    }
                 }
-                else if(_loop.TryAdvance(out _message))
-                {
-                    SavePlayerPosition();
-                }
+                else if(_loop.TryAdvance(out _message)) SavePlayerPosition();
             }
             if(GUILayout.Button("Reload saved state",GUILayout.MinHeight(38)))
             {
                 _loop=new FirstNeighborhoodPrototypeLoop(LocalWorldSaveStore.LoadOrCreate());
                 _actor?.Restore(_loop.State);
+                _resident?.Bind(_loop.SaveData);
                 _message="Reloaded saved neighborhood state and player position.";
             }
             GUILayout.Label(_message);

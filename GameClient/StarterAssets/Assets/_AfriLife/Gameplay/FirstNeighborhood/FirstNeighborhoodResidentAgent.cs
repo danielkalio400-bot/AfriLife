@@ -23,7 +23,16 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 case "park": _destination=new Vector3(3f,0f,3f);break;
                 default: _destination=new Vector3(6f,0f,3f);break;
             }
+            _destination.y=transform.position.y;
         }
+
+        public void MoveTo(Vector3 destination)
+        {
+            _destination=new Vector3(destination.x,transform.position.y,destination.z);
+            Available=true;
+        }
+
+        public bool CanConverse(Vector3 actorPosition) => InConversationRange(actorPosition);
 
         private void Update()
         {

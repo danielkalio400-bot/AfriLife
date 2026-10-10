@@ -41,3 +41,15 @@ test("HUD guards NPC interaction and loop uses social persistence before step",(
  assert.match(loop,/_residents.TryConversation\(nearbyResidentId,State,out message\)/);
  assert.doesNotMatch(loop,/gateSatisfied\s*=\s*true/);
 });
+
+test("resident director shares Ada saved identity, movement and conversation API",()=>{
+ const director=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodResidentDirector.cs");
+ const agent=unity("Gameplay/FirstNeighborhood/FirstNeighborhoodResidentAgent.cs");
+ const scene=unity("Editor/FirstNeighborhoodResidentSceneBuilder.cs");
+ assert.match(director,/Resident.MoveTo\(destination\)/);
+ assert.match(director,/Resident.CanConverse\(playerPosition\)/);
+ assert.match(agent,/public void MoveTo\(Vector3 destination\)/);
+ assert.match(agent,/public bool CanConverse\(Vector3 actorPosition\)/);
+ assert.match(scene,/prototype-resident-ada/);
+ assert.match(scene,/Resident - Ada/);
+});
