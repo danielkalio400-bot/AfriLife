@@ -51,7 +51,8 @@ namespace AfriLife.Core.Save
         {
             return world != null && world.Header != null &&
                 !string.IsNullOrWhiteSpace(world.Header.WorldId) &&
-                world.Header.SchemaVersion == 1 && world.Player != null;
+                world.Header.SchemaVersion == 1 && world.Player != null &&
+                FirstNeighborhoodSaveIntegrity.Check(world,out _);
         }
 
         private static Slot TryReadSlot(string path)
@@ -99,8 +100,19 @@ namespace AfriLife.Core.Save
 
         private static Slot Latest(Slot a, Slot b)
         {
+            // Two individually valid checksums must NEVER merge different
+            // world identities. Preserve both files for manual recovery.
+            if(a!=null && b!=null &&
+               a.World.Header.WorldId != b.World.Header.WorldId)
+                throw new InvalidDataException(
+                    "Two valid AfriLife save slots contain different world IDs.");
             if(a==null)return b;
             if(b==null)return a;
+            if(a.Generation==b.Generation &&
+               !string.Equals(JsonUtility.ToJson(a.World),
+                   JsonUtility.ToJson(b.World),StringComparison.Ordinal))
+                throw new InvalidDataException(
+                    "Save slots have conflicting content for the same generation.");
             return b.Generation>a.Generation?b:a;
         }
 
@@ -139,7 +151,8 @@ namespace AfriLife.Core.Save
             if(save==null)throw new ArgumentNullException(nameof(save));
             save.Normalize();
             if(!ValidWorld(save))
-                throw new InvalidDataException("World ID or schema is invalid.");
+                throw new InvalidDataException(
+                    "World header or daily-life ledger is invalid.");
 
             Slot a=TryReadSlot(SlotAPath),b=TryReadSlot(SlotBPath);
             Slot latest=Latest(a,b);

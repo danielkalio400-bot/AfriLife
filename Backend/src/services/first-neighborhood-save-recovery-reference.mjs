@@ -1,5 +1,37 @@
 import {createHash} from "node:crypto";
 const digest=source=>createHash("sha256").update(source,"utf8").digest("hex");
+export const validateFirstNeighborhoodLedger=world=>{
+ const s=world?.firstNeighborhoodPrototype;
+ if(!s || s.scenarioId!=="lagos-first-district-prototype")
+   return {ok:true};
+ const steps=["wake","shower","dress","eat","use-phone",
+  "buy-mobile-data","travel-or-drive","work","earn-money","shop",
+  "exercise","interact-with-persistent-npcs","pay-bills",
+  "return-home","sit-or-lie-down","sleep","save-and-reload"];
+ if(!Number.isInteger(s.nextStep)||s.nextStep<0||s.nextStep>steps.length||
+    !Number.isInteger(s.daysCompleted)||s.daysCompleted<0||
+    !Array.isArray(s.completedSteps)||s.completedSteps.length!==s.nextStep||
+    s.completedSteps.some((step,i)=>step!==steps[i]))
+   return {ok:false,error:"invalid_daily_loop"};
+ const siteById={"clinic-checkin":"clinic","market-supplies":"market",
+   "park-cleanup":"park","neighbor-help":"neighbor"};
+ const receipts=s.errandReceipts??[];
+ if(!Array.isArray(receipts)||receipts.length>50000)
+   return {ok:false,error:"invalid_errand_ledger"};
+ const ids=new Set();
+ for(const receipt of receipts){
+   if(!receipt || !Number.isInteger(receipt.completedDay)||
+      receipt.completedDay<0||receipt.completedDay>s.daysCompleted||
+      !Number.isSafeInteger(receipt.walletBalanceAfterMinorUnits)||
+      receipt.walletBalanceAfterMinorUnits<0||
+      !siteById[receipt.errandId]||siteById[receipt.errandId]!==receipt.siteId)
+     return {ok:false,error:"invalid_errand_receipt"};
+   const key=receipt.completedDay+"|"+receipt.errandId;
+   if(ids.has(key))return {ok:false,error:"duplicate_errand_receipt"};
+   ids.add(key);
+ }
+ return {ok:true};
+};
 const valid=envelope=>{
  if(!envelope || envelope.formatVersion!==1 ||
     !Number.isSafeInteger(envelope.generation) || envelope.generation<1 ||
@@ -9,7 +41,8 @@ const valid=envelope=>{
  try{
   const world=JSON.parse(envelope.payload);
   if(!world?.header?.worldId || !Number.isInteger(world?.header?.schemaVersion) ||
-     world.header.schemaVersion!==1 || !world.player)
+     world.header.schemaVersion!==1 || !world.player ||
+     !validateFirstNeighborhoodLedger(world).ok)
      return null;
   return {world,generation:envelope.generation};
  }catch{return null;}
@@ -22,6 +55,11 @@ export class FirstNeighborhoodSaveRecoveryReference {
  }
  read(){
   const a=valid(this.slotA),b=valid(this.slotB);
+  if(a && b && a.world.header.worldId!==b.world.header.worldId)
+   return {ok:false,error:"conflicting-world-identities"};
+  if(a && b && a.generation===b.generation &&
+     JSON.stringify(a.world)!==JSON.stringify(b.world))
+   return {ok:false,error:"conflicting-save-generations"};
   if(a || b){
    const latest=(!a ? b : !b ? a :
      b.generation>a.generation ? b : a);
@@ -31,7 +69,8 @@ export class FirstNeighborhoodSaveRecoveryReference {
   if(this.legacy){
    try {
     const world=JSON.parse(this.legacy);
-    if(world?.header?.worldId && world.header.schemaVersion===1 && world.player)
+    if(world?.header?.worldId && world.header.schemaVersion===1 &&
+       world.player && validateFirstNeighborhoodLedger(world).ok)
       return {ok:true,world,status:"loaded-legacy-save"};
    }catch{}
   }
@@ -40,7 +79,8 @@ export class FirstNeighborhoodSaveRecoveryReference {
   return {ok:false,error:"new-world"};
  }
  write(world,{interruptAfterStage=false}={}){
-  if(!world?.header?.worldId || world.header.schemaVersion!==1 || !world.player)
+  if(!world?.header?.worldId || world.header.schemaVersion!==1 ||
+      !world.player || !validateFirstNeighborhoodLedger(world).ok)
     return {ok:false,error:"invalid-world"};
   const latest=this.read();
   if(latest.ok && latest.world.header.worldId!==world.header.worldId)

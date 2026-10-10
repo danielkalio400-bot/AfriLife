@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "bulk": 37,
+  "scope": "first-neighborhood save integrity and conflict recovery",
+  "checks": [
+    "per-step exact chronology",
+    "completion index and day bounds",
+    "one errand receipt per activity per day",
+    "valid errand site and nonnegative ledger balance",
+    "no duplicate resident identifiers",
+    "finite saved player coordinates",
+    "never auto-merge two checked slots with different world IDs",
+    "conflicting same-generation contents are rejected"
+  ],
+  "trustBoundary": "checksummed local save integrity only, not security against deliberate tampering",
+  "behaviorOnCorruption": "recover an older valid slot or display a non-destructive recovery error",
+  "compatibility": "legacy world without prototype continues through old loading path",
+  "limits": [
+    "manual Unity Editor/Android/iOS/Windows compile and filesystem QA required",
+    "no cloud save or multiplayer economy",
+    "QA release gate remains blocked"
+  ]
+}
