@@ -62,7 +62,7 @@ namespace AfriLife.Gameplay.FirstNeighborhood
 
         public void AdvanceSchedule(long elapsedWorldSeconds)
         {
-            int hour=(int)((6L+(Math.Max(0L,elapsedWorldSeconds)/3600L))%24L);
+            int hour=FirstNeighborhoodWorldClock.HourOfDay(elapsedWorldSeconds);
             foreach (NpcRuntimeState npc in Residents())
             {
                 // Reversible, predetermined low-cost daypart schedule.

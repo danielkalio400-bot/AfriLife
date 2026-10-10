@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "bulk": 40,
+  "scope": "deterministic fictional Lagos demo calendar and business hours",
+  "startLocal": "06:00",
+  "secondsPerDay": 86400,
+  "transition": "Begin next playable day aligns elapsed seconds to next 06:00 strictly in the future",
+  "hours": {
+    "clinic-checkin": "08:00-17:00",
+    "market-supplies": "07:00-19:00",
+    "park-cleanup": "06:00-20:00",
+    "neighbor-help": "06:00-21:00"
+  },
+  "writes": "service window check precedes any wallet/inventory/resident mutation",
+  "saveField": "FirstNeighborhoodPrototypeState.ElapsedWorldSeconds",
+  "limitations": [
+    "fictional service hours not real Nigerian businesses",
+    "not wall-clock or real-time economy",
+    "no Play Mode/device testing",
+    "Ghana location is not changed by this bulk"
+  ]
+}

@@ -57,6 +57,15 @@ namespace AfriLife.Gameplay.FirstNeighborhood
                 message="This errand is already complete for today.";
                 return false;
             }
+            // Opening hours are checked before any wallet, inventory or
+            // resident reputation writes. Values are fictional demo rules.
+            if(!FirstNeighborhoodWorldClock.IsServiceOpen(
+                errandId,_loop.State.ElapsedWorldSeconds))
+            {
+                message="Service closed. Hours: "+
+                    FirstNeighborhoodWorldClock.HoursLabel(errandId);
+                return false;
+            }
 
             var player=_loop.SaveData.Player;
             switch(errandId)

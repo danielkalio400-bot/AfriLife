@@ -145,6 +145,8 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             GUILayout.Label("Progress: "+_loop.State.NextStep+"/"+FirstNeighborhoodPrototypeLoop.Steps.Length);
             GUILayout.Label("Funds (NGN minor units): "+_loop.CashMinorUnits);
             GUILayout.Label("Days completed: "+_loop.CompletedDays);
+            GUILayout.Label("Fictional local time: "+
+                FirstNeighborhoodWorldClock.Display(_loop.State.ElapsedWorldSeconds));
             GUILayout.Label("Save verification: "+LocalWorldSaveStore.LastLoadStatus);
             GUILayout.Label("Known residents: "+_loop.Residents.Residents().Count);
             if(_loop.CurrentStep=="interact-with-persistent-npcs")
@@ -156,9 +158,13 @@ namespace AfriLife.Gameplay.FirstNeighborhood
             {
                 string errandId=FirstNeighborhoodErrandService.ErrandIds[i];
                 var errands=new FirstNeighborhoodErrandService(_loop);
-                bool available=errands.CanCompleteToday(errandId);
-                GUI.enabled=available;
-                if(GUILayout.Button(_errandLabels[i]+(available?"":" [completed]"),GUILayout.MinHeight(34)))
+                bool completedAllowed=errands.CanCompleteToday(errandId);
+                bool open=FirstNeighborhoodWorldClock.IsServiceOpen(
+                    errandId,_loop.State.ElapsedWorldSeconds);
+                GUI.enabled=completedAllowed && open;
+                string hours=FirstNeighborhoodWorldClock.HoursLabel(errandId);
+                string note=!completedAllowed?" [completed]":!open?" [closed]":"";
+                if(GUILayout.Button(_errandLabels[i]+" ("+hours+")"+note,GUILayout.MinHeight(34)))
                 {
                     string site=FirstNeighborhoodErrandService.RequiredSite(errandId);
                     if(_actor==null || !FirstNeighborhoodInteractionPolicy.CanPerformSite(

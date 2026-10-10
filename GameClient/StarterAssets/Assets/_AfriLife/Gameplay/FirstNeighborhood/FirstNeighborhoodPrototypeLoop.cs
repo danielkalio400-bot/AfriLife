@@ -219,6 +219,12 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         public bool BeginNextDay()
         {
             if(State.NextStep!=Steps.Length)return false;
+            // CompleteAfterVerifiedReload increases the saved day number.
+            // The next playable day begins at 06:00, not at the previous
+            // evening's fractional clock position.
+            State.ElapsedWorldSeconds=FirstNeighborhoodWorldClock.BeginNextDay(
+                State.ElapsedWorldSeconds);
+            _residents.AdvanceSchedule(State.ElapsedWorldSeconds);
             State.NextStep=0;
             State.CompletedSteps=Array.Empty<string>();
             State.CurrentLocation="home";
