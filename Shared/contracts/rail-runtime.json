@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "phase": 33,
+  "systems": [
+    "stations",
+    "passenger-trains",
+    "freight-trains",
+    "tickets",
+    "schedules",
+    "drivers",
+    "conductors",
+    "rail-depots",
+    "repairs",
+    "rail-crossings",
+    "delays"
+  ],
+  "designRule": "Rail gameplay is a high-level transport and economy simulation. It does not provide real train-driving procedures, signaling instructions, crossing-bypass guidance, or rail-security evasion methods."
+}
