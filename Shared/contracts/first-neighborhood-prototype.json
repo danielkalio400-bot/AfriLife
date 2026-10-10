@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "bulk": 32,
+  "milestone": "scripted-first-neighborhood-vertical-slice",
+  "city": "Lagos",
+  "country": "Nigeria",
+  "prototypeDistrict": "prototype-district",
+  "firstPlay": "Unity Editor menu AfriLife/Build First Neighborhood Prototype Scene",
+  "steps": [
+    "wake",
+    "shower",
+    "dress",
+    "eat",
+    "use-phone",
+    "buy-mobile-data",
+    "travel-or-drive",
+    "work",
+    "earn-money",
+    "shop",
+    "exercise",
+    "interact-with-persistent-npcs",
+    "pay-bills",
+    "return-home",
+    "sit-or-lie-down",
+    "sleep",
+    "save-and-reload"
+  ],
+  "transactionsMinorUnits": {
+    "seedFunds": 5000,
+    "dataCost": 200,
+    "workIncome": 900,
+    "shoppingCost": 350,
+    "billCost": 400
+  },
+  "saveAuthority": "existing LocalWorldSaveStore / WorldSaveData / PlayerWorldState",
+  "reused": [
+    "DefaultInteractionRegistry",
+    "NeedsState",
+    "WalletState",
+    "PlayerInventory",
+    "MobilePhoneState",
+    "EmploymentState",
+    "BillState"
+  ],
+  "limits": [
+    "scripted choices and prefab primitive buildings; no real free-roam movement",
+    "NPC conversations are a placeholder",
+    "no working driving or live phone network",
+    "local save not production persistence",
+    "no Unity Editor compile certification"
+  ],
+  "gating": "Completing the scripted loop DOES NOT clear the Phase 43 expansion approval gate."
+}

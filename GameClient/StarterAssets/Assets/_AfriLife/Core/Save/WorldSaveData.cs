@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AfriLife.NPC;
+using AfriLife.Gameplay.FirstNeighborhood;
 using AfriLife.World.Neighborhood;
 using AfriLife.World.Streaming;
 
@@ -11,6 +12,7 @@ namespace AfriLife.Core.Save
     {
         public WorldSaveHeader Header = new();
         public PlayerWorldState Player = new();
+        public FirstNeighborhoodPrototypeState FirstNeighborhoodPrototype = new();
         public List<DistrictSimulationState> Districts = new();
         public List<NeighborhoodState> Neighborhoods = new();
         public List<NpcRuntimeState> PersistentNpcs = new();
@@ -19,6 +21,7 @@ namespace AfriLife.Core.Save
         {
             Header ??= new WorldSaveHeader();
             Player ??= new PlayerWorldState();
+            FirstNeighborhoodPrototype ??= new FirstNeighborhoodPrototypeState();
             Districts ??= new List<DistrictSimulationState>();
             Neighborhoods ??= new List<NeighborhoodState>();
             PersistentNpcs ??= new List<NpcRuntimeState>();
