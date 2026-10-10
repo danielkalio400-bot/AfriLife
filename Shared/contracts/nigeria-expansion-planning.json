@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "bulk": 31,
+  "phase": 43,
+  "countryId": "Nigeria",
+  "currency": "NGN",
+  "priorityCityIds": [
+    "Lagos",
+    "Abuja",
+    "PortHarcourt",
+    "Kano",
+    "Ibadan",
+    "Enugu"
+  ],
+  "profiles": [
+    {
+      "cityId": "Lagos",
+      "climate": "coastal-humid",
+      "coastal": true,
+      "harmattanRelevant": true,
+      "transportTags": [
+        "city-bus",
+        "minibus",
+        "ride-hailing",
+        "ferry",
+        "rail"
+      ],
+      "economyTags": [
+        "commerce",
+        "finance",
+        "logistics",
+        "technology",
+        "ports"
+      ],
+      "districtArchetypes": [
+        "urban-trade",
+        "metro-services"
+      ],
+      "weatherTags": [
+        "rainfall",
+        "flooding"
+      ],
+      "worldContentStatus": "design-only"
+    },
+    {
+      "cityId": "Abuja",
+      "climate": "guinea-savanna",
+      "coastal": false,
+      "harmattanRelevant": true,
+      "transportTags": [
+        "city-bus",
+        "taxi",
+        "ride-hailing",
+        "coach"
+      ],
+      "economyTags": [
+        "public-service",
+        "services",
+        "construction"
+      ],
+      "districtArchetypes": [
+        "administrative-core",
+        "public-services"
+      ],
+      "weatherTags": [
+        "heat",
+        "harmattan"
+      ],
+      "worldContentStatus": "design-only"
+    },
+    {
+      "cityId": "PortHarcourt",
+      "climate": "coastal-humid",
+      "coastal": true,
+      "harmattanRelevant": false,
+      "transportTags": [
+        "city-bus",
+        "minibus",
+        "taxi",
+        "ride-hailing"
+      ],
+      "economyTags": [
+        "energy",
+        "logistics",
+        "services",
+        "ports"
+      ],
+      "districtArchetypes": [
+        "industrial-services",
+        "riverine-trade"
+      ],
+      "weatherTags": [
+        "rainfall",
+        "flooding"
+      ],
+      "worldContentStatus": "design-only"
+    },
+    {
+      "cityId": "Kano",
+      "climate": "sudan-savanna",
+      "coastal": false,
+      "harmattanRelevant": true,
+      "transportTags": [
+        "city-bus",
+        "shared-taxi",
+        "coach"
+      ],
+      "economyTags": [
+        "trade",
+        "manufacturing",
+        "markets",
+        "agriculture"
+      ],
+      "districtArchetypes": [
+        "northern-commerce",
+        "distribution"
+      ],
+      "weatherTags": [
+        "heat",
+        "harmattan"
+      ],
+      "worldContentStatus": "design-only"
+    },
+    {
+      "cityId": "Ibadan",
+      "climate": "guinea-savanna",
+      "coastal": false,
+      "harmattanRelevant": true,
+      "transportTags": [
+        "city-bus",
+        "minibus",
+        "taxi",
+        "coach"
+      ],
+      "economyTags": [
+        "education",
+        "markets",
+        "services",
+        "agriculture"
+      ],
+      "districtArchetypes": [
+        "campus-services",
+        "regional-markets"
+      ],
+      "weatherTags": [
+        "rainfall",
+        "heat"
+      ],
+      "worldContentStatus": "design-only"
+    },
+    {
+      "cityId": "Enugu",
+      "climate": "rainforest",
+      "coastal": false,
+      "harmattanRelevant": false,
+      "transportTags": [
+        "city-bus",
+        "minibus",
+        "taxi",
+        "coach"
+      ],
+      "economyTags": [
+        "education",
+        "trade",
+        "services",
+        "small-industry"
+      ],
+      "districtArchetypes": [
+        "regional-services",
+        "creative-commerce"
+      ],
+      "weatherTags": [
+        "rainfall",
+        "erosion"
+      ],
+      "worldContentStatus": "design-only"
+    }
+  ],
+  "buildOrder": "Do not activate large Nigeria maps until the first serious neighborhood daily-life loop, persistence, Android/iOS/Windows QA and performance validation have passed.",
+  "activationPolicy": "No city in this contract has scene assets, physics, road geometry, NPC populations or certified streaming content. Expansion readiness does not certify playability.",
+  "parity": "Maintain Ghana priority city catalogs and shared first-neighborhood systems; Nigeria expansions cannot erase Ghana content.",
+  "qaSources": [
+    "first-neighborhood-runtime.json",
+    "daily-life-loop.json",
+    "city-catalog.json",
+    "world-reference/nigeria.json"
+  ],
+  "qaExtraEvidence": [
+    "unity-android",
+    "unity-ios",
+    "unity-windows",
+    "save-reload-integrity",
+    "streaming-budget"
+  ],
+  "source": "Unified Master Specification Phase 43 and first-neighborhood build-order gate, pp. 59 and 66"
+}

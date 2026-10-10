@@ -73,6 +73,12 @@ import { defenseCivilReadinessRuntime } from "./defense-contracts.mjs";
 import { DiplomacyPeaceService } from "./services/diplomacy-peace.mjs";
 import { handleDiplomacyPeace } from "./routes/diplomacy-peace.mjs";
 import { diplomacyPeaceContract } from "./diplomacy-contracts.mjs";
+import { NigeriaExpansionPlanningService } from "./services/nigeria-expansion-planning.mjs";
+import { handleNigeriaExpansionPlanning } from "./routes/nigeria-expansion-planning.mjs";
+import {
+  nigeriaExpansionContract,nigeriaCityCatalog,nigeriaFirstNeighborhood,
+  nigeriaDailyLife,nigeriaWorldReference
+} from "./nigeria-expansion-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -146,6 +152,11 @@ export function makeServer() {
   const folkloreStories = new FolkloreStoriesService();
   const defenseCivilReadiness = new DefenseCivilReadinessService({ government });
   const diplomacyPeace = new DiplomacyPeaceService({ government, media: newsMedia });
+  const nigeriaExpansion = new NigeriaExpansionPlanningService({
+    contract:nigeriaExpansionContract,catalog:nigeriaCityCatalog,
+    firstNeighborhood:nigeriaFirstNeighborhood,dailyLife:nigeriaDailyLife,
+    nigeriaReference:nigeriaWorldReference
+  });
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -209,6 +220,7 @@ export function makeServer() {
         folkloreStories: "local-opt-in-fictional-folklore-prototype",
         defenseCivilReadiness: "local-fictional-macro-and-civilian-impact-prototype",
         diplomacyPeace: "local-fictional-bilateral-peace-prototype",
+        nigeriaExpansion: "planning-only-first-neighborhood-gated",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -375,6 +387,9 @@ export function makeServer() {
     if (await handleDiplomacyPeace(req, res, path, {
       diplomacy: diplomacyPeace,
       contract: diplomacyPeaceContract,
+    })) return;
+    if (await handleNigeriaExpansionPlanning(req, res, path, {
+      expansion:nigeriaExpansion,contract:nigeriaExpansionContract,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });
