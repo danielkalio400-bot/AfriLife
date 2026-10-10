@@ -56,5 +56,5 @@ test("Unity HUD uses physical site checks, shared wallet and persisted world sta
  assert.match(state,/ErrandReceipts/);
  const editor=cs("Editor/FirstNeighborhoodWalkLayerBuilder.cs");
  assert.match(editor,/AddClinicMarker/);
- assert.match(editor,/AddMarker\("clinic"/);
+ assert.match(editor,/AddMarker\(scene,"clinic"/);
 });

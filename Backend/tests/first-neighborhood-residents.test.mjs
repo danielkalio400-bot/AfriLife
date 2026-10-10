@@ -16,7 +16,7 @@ test("NPCs have stable IDs, canonical WorldSaveData persistence and resident mar
  assert.match(state,/ConversationResidentIds/);
  assert.match(state,/ConversationCounts/);
  const editor=unity("Editor/FirstNeighborhoodWalkLayerBuilder.cs");
- assert.match(editor,/AddResidents\(\)/);
+ assert.match(editor,/AddResidents\(scene\)/);
  assert.match(editor,/AddComponent<FirstNeighborhoodResidentAgent>/);
 });
 test("resident conversation requires physical proximity and non-sleeping daypart",()=>{

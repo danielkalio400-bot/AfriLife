@@ -29,10 +29,10 @@ test("scene validator catches missing or duplicate markers and resident identiti
 });
 test("Unity upgrades existing player scene instead of skipping other marker repairs",()=>{
  const builder=src("Editor/FirstNeighborhoodWalkLayerBuilder.cs");
- assert.match(builder,/GameObject root=GameObject.Find\("AfriLife Walkable Player"\)/);
- assert.doesNotMatch(builder,/if \(GameObject.Find\("AfriLife Walkable Player"\) != null\)\s*return/);
- assert.match(builder,/GameObject existing=GameObject.Find\("Interact - "\+name\)/);
- assert.match(builder,/AddClinicMarker\(\)/);
+ assert.match(builder,/GameObject root=FindInScene\(scene,"AfriLife Walkable Player"\)/);
+ assert.doesNotMatch(builder,/if \(FindInScene\(scene,"AfriLife Walkable Player"\) != null\)\s*return/);
+ assert.match(builder,/GameObject existing=FindInScene\(scene,"Interact - "\+name\)/);
+ assert.match(builder,/AddClinicMarker\(scene\)/);
  const validator=src("Editor/FirstNeighborhoodSceneValidator.cs");
  assert.match(validator,/Validate First Neighborhood Prototype Scene/);
  assert.match(validator,/Missing interaction marker/);
