@@ -37,6 +37,9 @@ import { immigrationRuntime } from "./immigration-contracts.mjs";
 import { handleAviation } from "./routes/aviation.mjs";
 import { AviationService } from "./services/aviation.mjs";
 import { aviationRuntime } from "./aviation-contracts.mjs";
+import { handleMaritime } from "./routes/maritime.mjs";
+import { MaritimeService } from "./services/maritime.mjs";
+import { maritimeRuntime } from "./maritime-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -98,6 +101,7 @@ export function makeServer() {
   const corrections = new CorrectionsService();
   const immigration = new ImmigrationService();
   const aviation = new AviationService();
+  const maritime = new MaritimeService();
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -149,6 +153,7 @@ export function makeServer() {
         prisonSystem: "local-non-graphic-corrections-prototype",
         immigrationPassportVisa: "local-fictional-administration-prototype",
         airportsAviation: "local-high-level-transport-prototype",
+        maritimeTransport: "local-high-level-transport-economy-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -255,6 +260,11 @@ export function makeServer() {
     if (await handleAviation(req, res, path, {
       aviation,
       contract: aviationRuntime,
+    })) return;
+
+    if (await handleMaritime(req, res, path, {
+      maritime,
+      contract: maritimeRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });

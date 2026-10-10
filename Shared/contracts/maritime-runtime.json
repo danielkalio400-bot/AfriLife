@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "phase": 32,
+  "systems": [
+    "ports",
+    "passenger-ships",
+    "ferries",
+    "boats",
+    "yachts",
+    "cargo-ships",
+    "oil-tankers",
+    "captains",
+    "crew",
+    "ship-fuel",
+    "maintenance",
+    "weather",
+    "cargo",
+    "port-fees",
+    "maritime-trade"
+  ],
+  "designRule": "Maritime gameplay is high-level transport and economy simulation. It does not provide dangerous vessel-operation procedures, evasion methods, hazardous cargo handling instructions, or real navigation checklists."
+}
