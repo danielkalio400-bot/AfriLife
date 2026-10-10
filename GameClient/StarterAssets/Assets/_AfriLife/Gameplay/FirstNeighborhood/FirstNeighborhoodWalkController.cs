@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -70,16 +71,58 @@ namespace AfriLife.Gameplay.FirstNeighborhood
         public void Restore(FirstNeighborhoodPrototypeState state)
         {
             if (state == null || !state.HasSavedPosition) return;
-            Vector3 p = new Vector3(state.PlayerX,0f,state.PlayerZ);
+            Vector3 p = new Vector3(state.PlayerX, transform.position.y, state.PlayerZ);
             if (float.IsNaN(p.x) || float.IsInfinity(p.x) ||
                 float.IsNaN(p.z) || float.IsInfinity(p.z)) return;
-            // Existing demo blockout is confined to a small local square.
-            p.x=Mathf.Clamp(p.x,-16f,16f);
-            p.z=Mathf.Clamp(p.z,-16f,16f);
-            _controller.enabled=false;
-            transform.position=p;
-            _controller.enabled=true;
-            _lastPosition=p;
+
+            if (HasImportedProductionWorld())
+            {
+                // The saved schema records X/Z only. Recover the playable Y from
+                // the actual baked walkable surface, not an invented flat plane.
+                // Reject distant projection: this can teleport players through
+                // walls or erase their intended save location.
+                if (!NavMesh.SamplePosition(p, out NavMeshHit ground,
+                    5f, NavMesh.AllAreas) ||
+                    new Vector2(p.x - ground.position.x,
+                        p.z - ground.position.z).sqrMagnitude > 2.25f)
+                {
+                    Debug.LogWarning(
+                        "Saved neighborhood position has no nearby walkable NavMesh. " +
+                        "Preserving the saved coordinates; bake the production world " +
+                        "or repair its walkable surfaces before restoring.", this);
+                    return;
+                }
+                p = ground.position;
+            }
+            else
+            {
+                // Keep compatibility with the original 34 m square test map.
+                p.x = Mathf.Clamp(p.x, -16f, 16f);
+                p.z = Mathf.Clamp(p.z, -16f, 16f);
+                p.y = 0f;
+            }
+
+            if (_controller == null) _controller = GetComponent<CharacterController>();
+            if (_controller == null) return;
+            bool wasEnabled = _controller.enabled;
+            if (wasEnabled) _controller.enabled = false;
+            transform.position = p;
+            if (wasEnabled) _controller.enabled = true;
+            _lastPosition = p;
+        }
+
+        private bool HasImportedProductionWorld()
+        {
+            // Limit the lookup to this gameplay scene, not other additive scenes.
+            if (!gameObject.scene.IsValid() || !gameObject.scene.isLoaded)
+                return false;
+            foreach (GameObject root in gameObject.scene.GetRootGameObjects())
+            {
+                if (root.name == "AfriLife Production Neighborhood" &&
+                    root.activeInHierarchy)
+                    return true;
+            }
+            return false;
         }
 
         public void Capture(FirstNeighborhoodPrototypeState state)
