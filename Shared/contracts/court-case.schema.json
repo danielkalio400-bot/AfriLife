@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://afrilife.invalid/contracts/court-case.schema.json",
+  "title": "AfriLife Court Case",
+  "type": "object",
+  "required": ["caseId", "courtType", "state", "filingPartyEntityId"],
+  "properties": {
+    "caseId": { "type": "string", "minLength": 1 },
+    "courtType": { "enum": ["traffic", "criminal", "civil", "family"] },
+    "state": { "enum": ["filed", "scheduled", "hearing", "awaiting-decision", "decided", "appealed", "closed"] },
+    "filingPartyEntityId": { "type": "string", "minLength": 1 },
+    "respondingPartyEntityId": { "type": "string" },
+    "subjectTag": { "type": "string" }
+  }
+}

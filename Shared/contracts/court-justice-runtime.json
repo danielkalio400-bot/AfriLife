@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "phase": 28,
+  "systems": [
+    "judges",
+    "lawyers",
+    "prosecutors",
+    "clerks",
+    "witnesses",
+    "evidence",
+    "traffic-court",
+    "criminal-court",
+    "civil-court",
+    "family-court",
+    "property-disputes",
+    "business-disputes",
+    "appeals",
+    "sentencing",
+    "fines",
+    "restitution",
+    "community-service",
+    "prison-handoff"
+  ],
+  "designRule": "Court gameplay is an abstract fictional justice simulation. It does not provide legal advice, real sentencing guidance, or instructions for evading legal process."
+}

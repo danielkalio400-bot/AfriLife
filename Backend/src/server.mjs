@@ -25,6 +25,9 @@ import { propertyTheftRecoveryRuntime } from "./property-crime-contracts.mjs";
 import { handleJusticeInvestigations } from "./routes/justice-investigations.mjs";
 import { JusticeInvestigationService } from "./services/justice-investigations.mjs";
 import { policeInvestigationFinancialCrimeRuntime } from "./justice-contracts.mjs";
+import { handleCourts } from "./routes/courts.mjs";
+import { CourtService } from "./services/courts.mjs";
+import { courtJusticeRuntime } from "./court-contracts.mjs";
 import { realEstateRuntime, constructionRuntime } from "./property-contracts.mjs";
 import {
   marketplaceRuntime,
@@ -82,6 +85,7 @@ export function makeServer() {
   const emergency = new EmergencyDispatchService();
   const propertyIncidents = new PropertyIncidentService();
   const justiceInvestigations = new JusticeInvestigationService();
+  const courts = new CourtService();
 
   return createServer(async (req, res) => {
     const path = (req.url || "").split("?")[0];
@@ -129,6 +133,7 @@ export function makeServer() {
         emergencyServices: "local-dispatch-prototype",
         propertyTheftRecovery: "local-reporting-recovery-prototype",
         policeCidFinancialCrime: "local-lawful-process-prototype",
+        courtJustice: "local-fictional-justice-prototype",
         targets: platformTargets.targets.map(target => target.id),
       });
     }
@@ -215,6 +220,11 @@ export function makeServer() {
     if (await handleJusticeInvestigations(req, res, path, {
       justice: justiceInvestigations,
       contract: policeInvestigationFinancialCrimeRuntime,
+    })) return;
+
+    if (await handleCourts(req, res, path, {
+      courts,
+      contract: courtJusticeRuntime,
     })) return;
 
     return sendJson(res, 404, { error: "not_found" });
