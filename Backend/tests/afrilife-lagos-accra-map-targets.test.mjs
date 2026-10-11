@@ -7,7 +7,7 @@ const identity=read("World/Production/AfriLifeProductionCityIdentity.cs");
 const installer=read("Editor/AfriLifeWorldNavigationInstaller.cs");
 const hud=read("World/Production/AfriLifeCityDiscoveryHud.cs");
 test("approved Lagos and Accra target areas are installed into city scenes",()=>{
- assert.match(installer,/expectedCityId=="lagos"\?200:128/);
+ assert.match(installer,/expectedCityId=="lagos"\?2200:1408/);
  assert.match(installer,/Math\.Sqrt\(plannedArea\)/);
  assert.match(installer,/SetMapTarget\(plannedArea,side,side\)/);
  assert.match(identity,/public int TargetAreaKm2/);
