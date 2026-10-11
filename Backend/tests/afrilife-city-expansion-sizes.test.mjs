@@ -3,15 +3,15 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 const source=readFileSync(new URL("../../GameClient/StarterAssets/Assets/_AfriLife/World/Travel/AfriLifeCityExpansionPlan.cs",import.meta.url),"utf8");
 const entries=[...source.matchAll(/new AfriLifePlannedCity\("([^"]+)","([^"]+)","([^"]+)","(NG|GH)",(\d+)\)/g)];
-const agreed={lagos:2200,accra:1408,"port-harcourt":128,abuja:200,kumasi:128,kano:128,ibadan:162,"sekondi-takoradi":98,enugu:98,tamale:98};
+const agreed={lagos:46200,accra:29568,"port-harcourt":128,abuja:200,kumasi:128,kano:128,ibadan:162,"sekondi-takoradi":98,enugu:98,tamale:98};
 test("only ten explicitly agreed priority cities are in active production",()=>{
  assert.equal(entries.length,10);
  assert.deepEqual(new Set(entries.map(x=>x[1])),new Set(Object.keys(agreed)));
  assert.equal(entries.filter(x=>x[4]==="NG").length,6);
  assert.equal(entries.filter(x=>x[4]==="GH").length,4);
 });
-test("agreed targets total exactly 4648 square kilometres",()=>{
+test("agreed targets total exactly 76808 square kilometres",()=>{
  for(const row of entries)assert.equal(Number(row[5]),agreed[row[1]]);
- assert.equal(entries.reduce((sum,row)=>sum+Number(row[5]),0),4648);
+ assert.equal(entries.reduce((sum,row)=>sum+Number(row[5]),0),76808);
  assert.equal(new Set(entries.map(x=>x[3])).size,10);
 });

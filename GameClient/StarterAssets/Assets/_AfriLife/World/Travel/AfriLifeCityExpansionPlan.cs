@@ -26,12 +26,12 @@ namespace AfriLife.World.Travel
         public static readonly AfriLifePlannedCity[] Cities = {
             new AfriLifePlannedCity("enugu","Enugu","ng-enugu","NG",98),
             new AfriLifePlannedCity("kano","Kano","ng-kano","NG",128),
-            new AfriLifePlannedCity("lagos","Lagos","ng-lagos","NG",2200),
+            new AfriLifePlannedCity("lagos","Lagos","ng-lagos","NG",46200),
             new AfriLifePlannedCity("ibadan","Ibadan","ng-oyo","NG",162),
             new AfriLifePlannedCity("port-harcourt","Port Harcourt","ng-rivers","NG",128),
             new AfriLifePlannedCity("abuja","Abuja","ng-fct","NG",200),
             new AfriLifePlannedCity("kumasi","Kumasi","gh-ashanti","GH",128),
-            new AfriLifePlannedCity("accra","Accra","gh-greater-accra","GH",1408),
+            new AfriLifePlannedCity("accra","Accra","gh-greater-accra","GH",29568),
             new AfriLifePlannedCity("tamale","Tamale","gh-northern","GH",98),
             new AfriLifePlannedCity("sekondi-takoradi","Sekondi-Takoradi","gh-western","GH",98),
         };

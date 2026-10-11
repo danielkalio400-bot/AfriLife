@@ -52,7 +52,7 @@ namespace AfriLife.Editor
             GameObject host=identities[0].gameObject;
             // Approved target footprints; the existing small prototype terrain
             // is deliberately NOT resized or replaced during installation.
-            int plannedArea=expectedCityId=="lagos"?2200:1408;
+            int plannedArea=expectedCityId=="lagos"?46200:29568;
             float side=(float)Math.Sqrt(plannedArea);
             if(identities[0].TargetAreaKm2!=plannedArea ||
                Math.Abs(identities[0].TargetWidthKm-side)>0.001f ||
