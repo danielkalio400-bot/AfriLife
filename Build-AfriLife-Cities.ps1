@@ -116,11 +116,14 @@ try {
     $accra = Join-Path $ProjectPath 'Assets\_AfriLife\Scenes\ProductionAccra.unity'
     $confirmed = (Test-Path -LiteralPath $log) -and [bool](
         Select-String -LiteralPath $log -SimpleMatch 'AFRILIFE_CITY_BUILD_RESULT=SUCCESS')
-    if ($process.ExitCode -ne 0 -or -not $confirmed -or
+    $travelConfirmed = (Test-Path -LiteralPath $log) -and [bool](
+        Select-String -LiteralPath $log -SimpleMatch 'AFRILIFE_TRAVEL_BUILD_RESULT=SUCCESS')
+    if ($process.ExitCode -ne 0 -or -not $confirmed -or -not $travelConfirmed -or
         -not (Test-Path -LiteralPath $lagos) -or -not (Test-Path -LiteralPath $accra)) {
         if (Test-Path -LiteralPath $log) { Get-Content -LiteralPath $log -Tail 85 }
         throw ('AfriLife Unity city authoring failed; Editor exit ' + $process.ExitCode)
     }
+    Write-Host 'AFRILIFE TRAVEL NAVIGATION INSTALLED IN UNITY'
     Write-Host 'AFRILIFE CITY SCENES CREATED IN UNITY'
     Write-Host ('Lagos: ' + $lagos)
     Write-Host ('Accra: ' + $accra)

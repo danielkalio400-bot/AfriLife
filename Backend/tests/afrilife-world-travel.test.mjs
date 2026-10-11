@@ -69,3 +69,10 @@ test("navigator uses non-GUILayout controls and never promises simulated border 
  assert.match(navigator,/Road, flight and border journeys are not yet simulated/);
  assert.match(navigator,/Current: /);
 });
+
+test("Windows installer requires verified world travel scene installation",()=>{
+ const ps=readFileSync(new URL("../../Build-AfriLife-Cities.ps1",import.meta.url),"utf8");
+ assert.match(ps,/AFRILIFE_TRAVEL_BUILD_RESULT=SUCCESS/);
+ assert.match(ps,/AFRILIFE TRAVEL NAVIGATION INSTALLED IN UNITY/);
+ assert.match(ps,/not \$travelConfirmed/);
+});
