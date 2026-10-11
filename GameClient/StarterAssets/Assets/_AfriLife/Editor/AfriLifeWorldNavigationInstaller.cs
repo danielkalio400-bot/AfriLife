@@ -55,6 +55,11 @@ namespace AfriLife.Editor
                 host.AddComponent<AfriLifeWorldNavigator>();
                 changed=true;
             }
+            if(host.GetComponent<AfriLifeCityDiscoveryHud>()==null)
+            {
+                host.AddComponent<AfriLifeCityDiscoveryHud>();
+                changed=true;
+            }
 
             // The original FirstNeighborhoodPrototypeLoop explicitly rejects
             // non-Lagos save locations and always uses NGN. Do not activate
