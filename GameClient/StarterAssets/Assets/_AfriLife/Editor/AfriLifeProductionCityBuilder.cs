@@ -44,6 +44,9 @@ namespace AfriLife.Editor
                 if (!scenes.Any(s => s.path == path))
                     scenes.Add(new EditorBuildSettingsScene(path, true));
             EditorBuildSettings.scenes = scenes.ToArray();
+            // Bulk 56: safe existing-scene retrofit. Ghana's Lagos-only
+            // legacy HUD is disabled; all original art and actors remain.
+            AfriLifeWorldNavigationInstaller.Install();
             AssetDatabase.SaveAssets();
             Debug.Log("AFRILIFE_CITY_BUILD_RESULT=SUCCESS Lagos=" +
                 File.Exists(LagosScene) + " Accra=" + File.Exists(AccraScene));
