@@ -87,7 +87,8 @@ namespace AfriLife.Editor
         }
         private static string RequiredArg(string key)
         {
-            var args=Environment.GetCommandLineArgs();
+            // Disambiguate the .NET type from the AfriLife.Environment namespace.
+            var args=global::System.Environment.GetCommandLineArgs();
             for(int i=0;i<args.Length;i++)
                 if(string.Equals(args[i],key,StringComparison.OrdinalIgnoreCase))
                 {
