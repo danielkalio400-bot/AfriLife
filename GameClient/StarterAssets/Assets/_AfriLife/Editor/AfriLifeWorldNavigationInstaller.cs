@@ -50,6 +50,17 @@ namespace AfriLife.Editor
 
             bool changed=false;
             GameObject host=identities[0].gameObject;
+            // Approved target footprints; the existing small prototype terrain
+            // is deliberately NOT resized or replaced during installation.
+            int plannedArea=expectedCityId=="lagos"?200:128;
+            float side=(float)Math.Sqrt(plannedArea);
+            if(identities[0].TargetAreaKm2!=plannedArea ||
+               Math.Abs(identities[0].TargetWidthKm-side)>0.001f ||
+               Math.Abs(identities[0].TargetHeightKm-side)>0.001f)
+            {
+                identities[0].SetMapTarget(plannedArea,side,side);
+                changed=true;
+            }
             if(host.GetComponent<AfriLifeWorldNavigator>()==null)
             {
                 host.AddComponent<AfriLifeWorldNavigator>();

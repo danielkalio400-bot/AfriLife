@@ -52,7 +52,8 @@ namespace AfriLife.World.Production
             float x=safe.xMax-width-12f;
             float y=safe.y+58f;
             if(GUI.Button(new Rect(x,y,width,38f),
-                _city.DisplayName+" | Sites "+_seen.Count+"/"+UniqueSiteCount()))
+                _city.DisplayName+" | "+_city.TargetAreaKm2+
+                " km2 TARGET | Sites "+_seen.Count+"/"+UniqueSiteCount()))
                 _expanded=!_expanded;
             if(!_expanded)return;
             float height=Mathf.Min(260f,Mathf.Max(110f,safe.height-y-120f));
@@ -60,7 +61,9 @@ namespace AfriLife.World.Production
             float w=width-20f;
             GUI.Label(new Rect(x+10f,y+67f,w,25f),Place+" | "+Currency);
             GUI.Label(new Rect(x+10f,y+94f,w,42f),
-                "Explore real markers in the prototype neighborhood.");
+                "Planned: "+_city.TargetWidthKm.ToString("0.00")+" x "+
+                _city.TargetHeightKm.ToString("0.00")+
+                " km. Prototype terrain is smaller.");
             int line=0;
             var rendered=new HashSet<string>(StringComparer.Ordinal);
             foreach(var site in _sites)
