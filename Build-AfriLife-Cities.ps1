@@ -9,6 +9,17 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $ProjectPath = [IO.Path]::GetFullPath($ProjectPath)
+$versionFile = Join-Path $ProjectPath 'ProjectSettings\ProjectVersion.txt'
+if (-not (Test-Path -LiteralPath $versionFile)) {
+    if ($Preview) {
+        Write-Host ('PREVIEW: AfriLife Unity project needs to be created: ' + $ProjectPath)
+        return
+    }
+    $init = Join-Path $env:TEMP 'Initialize-AfriLife-Unity.ps1'
+    Invoke-WebRequest -UseBasicParsing -Uri 'https://raw.githubusercontent.com/danielkalio400-bot/AfriLife/main/Initialize-AfriLife-Unity.ps1' -OutFile $init
+    & $init -ProjectPath $ProjectPath -UnityEditorPath $UnityEditorPath
+    if (-not $?) { throw 'AfriLife Unity initialization failed.' }
+}
 foreach ($required in @('Assets','Packages\manifest.json','ProjectSettings\ProjectVersion.txt')) {
     if (-not (Test-Path -LiteralPath (Join-Path $ProjectPath $required))) {
         throw ('Create a Unity 6 Universal 3D / URP project at ' + $ProjectPath + ' using Unity Hub, or pass -ProjectPath.')
